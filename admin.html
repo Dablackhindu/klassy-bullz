@@ -33,6 +33,8 @@ button{font:inherit;color:inherit;cursor:pointer;background:none;border:none}
 .top a.view:hover{color:var(--gold)}
 .tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;margin-top:12px}
 .tabs::-webkit-scrollbar{display:none}
+.tabs{-webkit-mask-image:linear-gradient(90deg,#000 88%,transparent);mask-image:linear-gradient(90deg,#000 88%,transparent)}
+.tabs button:last-child{margin-right:28px}
 .tabs button{flex:none;padding:10px 14px 12px;font-size:14px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent}
 .tabs button[aria-selected=true]{color:var(--bone);border-bottom-color:var(--gold)}
 
@@ -196,7 +198,7 @@ const CHIP_PRESETS={
   puppies:['Breed-panel DNA clear','Vet-checked','Microchipped','1st vaccination','2nd vaccination','Flea & worm treated','KC registered','Insured 4 weeks'],
   studs:['Breed-panel clear','Fertility tested','Proven','KC registered','Open nostrils','Fluffy carrier','Chocolate carrier']
 };
-const TABS=[['puppies','Puppies'],['litter','Litter'],['studs','Studs'],['clinic','Clinic'],['sold','Families'],['settings','Details']];
+const TABS=[['puppies','Puppies'],['litter','Litter'],['studs','Studs'],['clinic','Clinic'],['sold','Families'],['settings','Contact']];
 
 // ---------- storage (never trusted to exist) ----------
 const store={get(k){try{return localStorage.getItem(k)}catch{return null}},set(k,v){try{localStorage.setItem(k,v)}catch{}},del(k){try{localStorage.removeItem(k)}catch{}}};
@@ -361,6 +363,7 @@ const S={
 // ---------- drawing ----------
 function draw(){
   $('tabs').innerHTML=TABS.map(([k,l])=>`<button role="tab" aria-selected="${k===tab}" data-tab="${k}">${l}</button>`).join('');
+  $('tabs').querySelector('[aria-selected=true]')?.scrollIntoView({inline:'nearest',block:'nearest'});
   const m=$('main');
   if(editing)m.innerHTML=drawEditor();
   else if(S[tab])m.innerHTML=drawList(tab);
@@ -376,7 +379,7 @@ function drawList(k){
     const [ph,t,sub]=S[k].row(x);
     return `<div class="row"><button class="open" data-edit="${i}"><span class="thumb" style="${ph?`background-image:url('${esc(imgSrc(ph))}')`:''}">${ph?'':esc((x.name||'?')[0])}</span><span class="t"><b>${esc(t)}</b><span>${sub}</span></span></button>
       <span class="move"><button data-mv="${i}" data-d="-1" aria-label="Move ${esc(t)} up" ${i?'':'disabled'}>▲</button><button data-mv="${i}" data-d="1" aria-label="Move ${esc(t)} down" ${i<arr.length-1?'':'disabled'}>▼</button></span></div>`;
-  }).join('')+`</div><button class="add" data-add="${k}">+ Add ${S[k].one}</button>`+(k==='puppies'?'':'');
+  }).join('')+`</div><button class="add" data-add="${k}">+ Add ${S[k].one}</button>`+(TAIL[k]?.()||'');
 }
 function field(obj,[k,label,type,o={}],path){
   const id='f_'+k,v=obj[k],hint=o.hint?`<p class="hint">${esc(o.hint)}</p>`:'';
@@ -416,15 +419,20 @@ function drawLitter(){
   field(L,['title','Headline','text',{hint:'e.g. "Spring 2027 — due March"'}],'litter')+
   field(L,['body','Details','textarea',{hint:'Wrap words in **double stars** to make them bold.'}],'litter');
 }
+// section-specific settings that sit under a list, next to the dogs they belong with
+const TAIL={
+  studs:()=>`<h2 style="font-size:21px;margin-top:34px">Chilled semen</h2><p class="sub">Shown under your studs on the site.</p>`+
+    field(data,['chilledFee','Courier fee (on top of the stud fee)','money'],''),
+  sold:()=>{data.quote??={};return `<h2 style="font-size:21px;margin-top:34px">Testimonial</h2><p class="sub">The quote under the families gallery. Leave it empty to hide it.</p>`+
+    field(data.quote,['text','Quote','textarea'],'quote')+
+    field(data.quote,['by','From','text',{hint:'e.g. "Peaches\' family, Leeds"'}],'quote')}
+};
 function drawSettings(){
-  data.contact??={};data.quote??={};
-  return `<h2>Details</h2><p class="sub">Contact details, the testimonial, and fixed fees.</p>`+
+  data.contact??={};
+  return `<h2>Contact</h2><p class="sub">Your contact details, shown across the whole site.</p>`+
   field(data.contact,['email','Email','text'],'contact')+
   field(data.contact,['phone','Phone / WhatsApp','text'],'contact')+
   field(data.contact,['instagram','Instagram','text'],'contact')+
-  field(data,['chilledFee','Chilled semen courier (on top of stud fee)','money'],'')+
-  field(data.quote,['text','Testimonial','textarea',{hint:'Leave empty to hide it.'}],'quote')+
-  field(data.quote,['by','Testimonial from','text',{hint:'e.g. "Peaches\' family, Leeds"'}],'quote')+
   `<button class="signout" id="signout">Sign out of this device</button>`;
 }
 
