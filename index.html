@@ -112,9 +112,7 @@ img{max-width:100%;display:block}
   box-shadow:0 30px 90px rgba(0,0,0,.55),0 0 90px rgba(217,164,65,.10);
   background:var(--coal);
 }
-.crest video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-#vidLoop{z-index:1}
-#vidReveal{z-index:2;transition:opacity .3s ease}
+.crest img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .crest-vignette{
   position:absolute;inset:0;z-index:3;pointer-events:none;
   background:radial-gradient(125% 125% at 50% 45%,transparent 58%,rgba(14,12,9,.5) 100%);
@@ -134,11 +132,6 @@ img{max-width:100%;display:block}
 }
 @media (max-width:640px){.scroll-hint{display:none}}
 
-/* compressed-loop caveat — quiet fine print under the hero */
-.loop-note{
-  font-size:12px;color:var(--muted);
-  max-width:var(--max);margin:0 auto;padding:0 28px 18px;
-}
 
 /* ---------- trust strip ---------- */
 .trust{border-top:1px solid var(--hairline);border-bottom:1px solid var(--hairline);background:var(--coal-glass)}
@@ -389,14 +382,12 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;
       </div>
     </div>
     <div class="crest" role="img" aria-label="Klassy Bullz Kennels gold crest emblem">
-      <video id="vidLoop" muted playsinline loop preload="auto" poster="video/kb-crest-poster.jpg" src="video/kb_loop.mp4"></video>
-      <video id="vidReveal" muted playsinline autoplay preload="auto" src="video/kb_reveal.mp4"></video>
+      <img src="img/kb-crest.jpg" alt="" width="1080" height="1080" fetchpriority="high">
       <div class="crest-vignette"></div>
     </div>
   </div>
   <p class="scroll-hint" aria-hidden="true">Scroll</p>
 </header>
-<p class="loop-note">Preview video is compressed for fast loading — the delivered build ships the full-resolution asset.</p>
 
 <div class="trust">
   <div class="wrap">
@@ -697,15 +688,6 @@ else fetch('data/site.json?v='+Date.now(),{cache:'no-store'}).then(r=>r.json()).
   .catch(err=>{console.error('site.json failed',err);$('puppyCards').innerHTML='<p class="card-meta">Listings are loading slowly — please refresh, or get in touch below.</p>'});
 })();
 
-// crest video: reveal plays once, then hands off to the pinned-frame loop
-(()=>{
-const rv=document.getElementById('vidReveal'),lp=document.getElementById('vidLoop');
-const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-if(reduced){rv.remove();lp.pause();return}
-const toLoop=()=>{lp.play().catch(()=>{});rv.style.opacity='0';setTimeout(()=>rv.remove(),350)};
-rv.addEventListener('ended',toLoop);
-rv.play().catch(toLoop); // autoplay blocked → fall straight to the loop poster/loop
-})();
 
 // ---- the bloodline: vertical pedigree constellation scrolling behind the page ----
 (()=>{
