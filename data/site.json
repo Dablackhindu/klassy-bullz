@@ -1,0 +1,104 @@
+{
+  "puppies": [
+    {
+      "id": "reggie",
+      "name": "Reggie",
+      "colour": "Blue fawn",
+      "sex": "Male",
+      "dob": "2026-06-14",
+      "ready": "Ready now",
+      "status": "available",
+      "price": 2500,
+      "chips": ["Breed-panel DNA clear", "Vet-checked", "Microchipped", "1st vaccination"],
+      "photos": []
+    },
+    {
+      "id": "delilah",
+      "name": "Delilah",
+      "colour": "Lilac & tan",
+      "sex": "Female",
+      "dob": "2026-06-14",
+      "ready": "Ready now",
+      "status": "available",
+      "price": 3000,
+      "chips": ["Breed-panel DNA clear", "Vet-checked", "Microchipped", "1st vaccination"],
+      "photos": []
+    },
+    {
+      "id": "winston",
+      "name": "Winston",
+      "colour": "Brindle",
+      "sex": "Male",
+      "dob": "2026-06-14",
+      "ready": "Ready now",
+      "status": "reserved",
+      "price": 2800,
+      "chips": ["Breed-panel DNA clear", "Vet-checked", "Microchipped", "1st vaccination"],
+      "photos": []
+    }
+  ],
+  "litter": {
+    "show": true,
+    "title": "Autumn 2026 — due September",
+    "body": "Our lilac & tan girl and a proven, breed-panel-clear sire. Puppies home from **mid-November**. The waitlist is free to join and runs first-come, first-choice; a **£500 deposit** reserves your pick once the litter arrives."
+  },
+  "studs": [
+    {
+      "id": "kaiser",
+      "name": "Kaiser",
+      "colour": "Lilac & tan",
+      "note": "Proven — 3 litters on the ground",
+      "fee": 700,
+      "chips": ["Breed-panel clear", "Fertility tested", "Compact & open-nostrilled"],
+      "photos": []
+    },
+    {
+      "id": "bruno",
+      "name": "Bruno",
+      "colour": "Blue fawn",
+      "note": "First season — semen analysed & excellent",
+      "fee": 500,
+      "chips": ["Breed-panel clear", "Fertility tested", "Fluffy carrier"],
+      "photos": []
+    }
+  ],
+  "chilledFee": 150,
+  "clinic": [
+    {
+      "icon": "scan",
+      "name": "Pregnancy scanning",
+      "desc": "Ultrasound confirmation from day 28, with an estimated count and a printed scan photo to keep. Calm handling, no rushing.",
+      "price": 40,
+      "unit": "Per scan"
+    },
+    {
+      "icon": "chip",
+      "name": "Microchipping",
+      "desc": "Fitted by a trained, registered implanter and logged to a UK-compliant database before you leave. Litter rates for three or more.",
+      "price": 15,
+      "unit": "Per dog · litters from £12"
+    },
+    {
+      "icon": "flask",
+      "name": "Semen analysis",
+      "desc": "Motility, concentration and morphology assessed on site with a written report — know exactly where your stud stands before a booking.",
+      "price": 50,
+      "unit": "Per analysis"
+    }
+  ],
+  "sold": [
+    { "id": "blue", "name": "Blue", "place": "Manchester", "year": "2025", "photo": "" },
+    { "id": "peaches", "name": "Peaches", "place": "Leeds", "year": "2025", "photo": "" },
+    { "id": "hugo", "name": "Hugo", "place": "Birmingham", "year": "2024", "photo": "" },
+    { "id": "nala", "name": "Nala", "place": "London", "year": "2024", "photo": "" }
+  ],
+  "quote": {
+    "text": "From the first video call to the day we collected her, everything was open — we met mum, saw the DNA results, and got answers at midnight when she wouldn't settle. You can tell these dogs are family first.",
+    "by": "Peaches' family, Leeds"
+  },
+  "contact": {
+    "email": "hello@klassybullz.co.uk",
+    "phone": "07 ··· ··· ···",
+    "instagram": "@klassybullz"
+  }
+}

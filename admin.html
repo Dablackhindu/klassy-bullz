@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0E0C09">
+<title>Klassy Bullz Admin</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --ink:#0E0C09;--coal:#171310;--coal-2:#1E1915;--bone:#EFE7DA;--muted:#9C8F7C;
+  --gold:#D9A441;--gold-soft:rgba(217,164,65,.14);--gold-line:rgba(217,164,65,.35);
+  --hairline:rgba(239,231,218,.10);--red:#E06A55;--green:#7FB77E;
+  --serif:'Fraunces',Georgia,serif;--sans:'Figtree',system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--ink);color:var(--bone);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100svh}
+[hidden]{display:none!important}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:none}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.app{max-width:720px;margin:0 auto;padding:0 16px calc(110px + env(safe-area-inset-bottom))}
+
+/* top bar */
+.top{position:sticky;top:0;z-index:20;background:rgba(14,12,9,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--hairline);margin:0 -16px;padding:14px 16px 0}
+.top-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px}
+.mark{width:32px;height:32px;border:1px solid var(--gold-line);border-radius:50%;display:grid;place-items:center;font-family:var(--serif);font-weight:900;font-size:14px;color:var(--gold)}
+.brand b{font-family:var(--serif);font-size:17px}
+.brand small{display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.top a.view{font-size:13px;font-weight:600;color:var(--muted);text-decoration:none}
+.top a.view:hover{color:var(--gold)}
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;margin-top:12px}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:none;padding:10px 14px 12px;font-size:14px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent}
+.tabs button[aria-selected=true]{color:var(--bone);border-bottom-color:var(--gold)}
+
+h2{font-family:var(--serif);font-size:26px;margin:26px 0 4px}
+.sub{color:var(--muted);font-size:14px;margin-bottom:18px}
+
+/* list rows */
+.list{display:flex;flex-direction:column;gap:10px}
+.row{display:flex;align-items:center;gap:12px;background:var(--coal);border:1px solid var(--hairline);border-radius:14px;padding:10px;min-height:76px}
+.row .open{flex:1;display:flex;align-items:center;gap:12px;text-align:left;min-width:0}
+.thumb{flex:none;width:56px;height:56px;border-radius:10px;background:var(--coal-2) center/cover;display:grid;place-items:center;color:var(--gold);font-family:var(--serif);font-weight:900;border:1px solid var(--hairline)}
+.row .t{min-width:0}
+.row .t b{display:block;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .t span{display:block;font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pill{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:999px;margin-right:6px;vertical-align:1px}
+.pill.available{background:var(--gold-soft);color:var(--gold)}
+.pill.reserved{background:rgba(156,143,124,.18);color:var(--bone)}
+.pill.sold{background:rgba(224,106,85,.16);color:var(--red)}
+.move{display:flex;flex-direction:column;gap:2px}
+.move button{width:40px;height:30px;border-radius:8px;color:var(--muted);font-size:15px}
+.move button:hover{background:var(--coal-2);color:var(--bone)}
+.move button:disabled{opacity:.2;cursor:default;background:none}
+.add{margin-top:12px;width:100%;padding:16px;border:1px dashed var(--gold-line);border-radius:14px;color:var(--gold);font-weight:700;letter-spacing:.04em}
+.add:hover{background:var(--gold-soft)}
+
+/* forms */
+.field{margin-bottom:18px}
+.field>label,.lbl{display:block;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.hint{font-size:12.5px;color:var(--muted);margin-top:6px}
+input[type=text],input[type=date],input[type=number],input[type=email],input[type=password],select,textarea{
+  width:100%;background:var(--coal);border:1px solid var(--hairline);border-radius:10px;color:var(--bone);
+  font-family:var(--sans);font-size:16px;padding:13px 14px;
+}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold)}
+textarea{min-height:120px;resize:vertical}
+input[type=date]{color-scheme:dark}
+.money{position:relative}
+.money::before{content:"£";position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.money input{padding-left:28px}
+.seg{display:flex;background:var(--coal);border:1px solid var(--hairline);border-radius:12px;padding:4px;gap:4px}
+.seg button{flex:1;padding:11px 8px;border-radius:9px;font-weight:600;font-size:14.5px;color:var(--muted)}
+.seg button[aria-pressed=true]{background:var(--gold);color:var(--ink)}
+.check{display:flex;align-items:center;gap:12px;font-size:15px;padding:6px 0;cursor:pointer}
+.check input{width:22px;height:22px;accent-color:var(--gold)}
+.chipset{display:flex;flex-wrap:wrap;gap:8px}
+.chipset button{padding:8px 13px;border-radius:999px;border:1px solid var(--hairline);font-size:13.5px;font-weight:600;color:var(--muted)}
+.chipset button[aria-pressed=true]{background:var(--gold-soft);border-color:var(--gold-line);color:var(--bone)}
+.chipset button[aria-pressed=true]::before{content:"✓ ";color:var(--gold)}
+.chip-add{display:flex;gap:8px;margin-top:10px}
+.chip-add input{flex:1}
+
+/* photos */
+.photos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ph{position:relative;aspect-ratio:1;border-radius:10px;background:var(--coal-2) center/cover;border:1px solid var(--hairline);overflow:hidden}
+.ph.cover{border-color:var(--gold)}
+.ph .badge{position:absolute;left:6px;top:6px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--gold);color:var(--ink);padding:2px 7px;border-radius:999px}
+.ph .acts{position:absolute;inset:auto 0 0 0;display:flex;justify-content:space-between;padding:5px;background:linear-gradient(transparent,rgba(0,0,0,.75))}
+.ph .acts button{width:34px;height:34px;border-radius:50%;background:rgba(14,12,9,.8);font-size:14px;display:grid;place-items:center}
+.ph .acts button:hover{color:var(--gold)}
+.ph.busy{display:grid;place-items:center;font-size:12px;color:var(--muted)}
+.ph-add{aspect-ratio:1;border:1px dashed var(--gold-line);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--gold);font-size:13px;font-weight:700;cursor:pointer;text-align:center}
+.ph-add:hover{background:var(--gold-soft)}
+.ph-add span{font-size:26px;line-height:1}
+.ph-add input{display:none}
+
+/* editor sheet */
+.sheet-head{display:flex;align-items:center;gap:10px;margin:18px 0 20px}
+.back{padding:10px 14px 10px 0;font-weight:700;color:var(--gold);font-size:15px}
+.sheet-head h2{margin:0;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.danger{margin-top:26px;width:100%;padding:14px;border-radius:12px;border:1px solid rgba(224,106,85,.35);color:var(--red);font-weight:700}
+.danger:hover{background:rgba(224,106,85,.1)}
+.callout{background:var(--coal);border:1px solid var(--gold-line);border-radius:14px;padding:16px;margin-bottom:18px}
+.callout p{font-size:14px;color:var(--muted);margin-bottom:12px}
+.callout .inline{display:flex;gap:8px}
+.callout .inline input{flex:1}
+.btn{padding:13px 20px;border-radius:999px;font-weight:700;font-size:14px;letter-spacing:.04em}
+.btn-gold{background:var(--gold);color:var(--ink)}
+.btn-gold:disabled{opacity:.45;cursor:default}
+.btn-ghost{border:1px solid var(--gold-line)}
+
+/* publish bar */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(23,19,16,.97);border-top:1px solid var(--gold-line);padding:12px 16px calc(12px + env(safe-area-inset-bottom));backdrop-filter:blur(10px)}
+.bar-in{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.bar-msg{flex:1;font-size:14px;color:var(--muted);min-width:0}
+.bar-msg b{color:var(--bone)}
+.bar .undo{font-size:13px;font-weight:600;color:var(--muted);padding:10px 6px}
+.bar .undo:hover{color:var(--bone)}
+
+/* toast */
+.toast{position:fixed;left:50%;top:18px;transform:translateX(-50%);z-index:50;background:var(--coal);border:1px solid var(--gold-line);border-radius:12px;padding:12px 18px;font-size:14px;max-width:calc(100% - 32px);box-shadow:0 12px 40px rgba(0,0,0,.5)}
+.toast.err{border-color:var(--red);color:#F3C1B7}
+.toast.ok{border-color:var(--green)}
+
+/* login */
+.login{max-width:460px;margin:0 auto;padding:12svh 20px 40px}
+.login .mark{width:56px;height:56px;font-size:22px;margin-bottom:20px}
+.login h1{font-family:var(--serif);font-size:32px;line-height:1.1;margin-bottom:10px}
+.login p{color:var(--muted);font-size:15px;margin-bottom:22px}
+.login details{margin-top:24px;background:var(--coal);border:1px solid var(--hairline);border-radius:12px;padding:14px 16px;font-size:14px;color:var(--muted)}
+.login summary{cursor:pointer;color:var(--bone);font-weight:600}
+.login ol{margin:12px 0 0 18px;display:flex;flex-direction:column;gap:6px}
+.login ol b{color:var(--bone)}
+.login a{color:var(--gold)}
+.login .btn{width:100%;margin-top:14px;padding:15px}
+.loading{padding:30svh 0;text-align:center;color:var(--muted)}
+.signout{margin-top:36px;font-size:13px;color:var(--muted);text-decoration:underline}
+</style>
+</head>
+<body>
+
+<!-- sign-in -->
+<section class="login" id="login" hidden>
+  <div class="mark">KB</div>
+  <h1>Klassy Bullz admin</h1>
+  <p>Edit puppies, studs, prices and photos. Changes go live on the site about a minute after you publish.</p>
+  <form id="loginForm">
+    <label class="lbl" for="tok">Access key</label>
+    <input type="password" id="tok" autocomplete="current-password" placeholder="github_pat_…" required>
+    <button class="btn btn-gold" type="submit">Sign in</button>
+  </form>
+  <details>
+    <summary>Getting your access key (one-time)</summary>
+    <ol>
+      <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub → new fine-grained token</a>, signed in as Dablackhindu.</li>
+      <li>Name it <b>Klassy Bullz admin</b>, expiry <b>1 year</b>.</li>
+      <li>Repository access → <b>Only select repositories</b> → <b>klassy-bullz</b>.</li>
+      <li>Permissions → Repository → <b>Contents: Read and write</b>. Nothing else.</li>
+      <li>Generate, copy, paste above. This phone remembers it.</li>
+    </ol>
+  </details>
+</section>
+
+<div class="loading" id="loading">Loading…</div>
+
+<div class="app" id="app" hidden>
+  <header class="top">
+    <div class="top-row">
+      <div class="brand"><span class="mark">KB</span><div><b>Klassy Bullz</b><small>Admin</small></div></div>
+      <a class="view" href="./" target="_blank" rel="noopener">View site ↗</a>
+    </div>
+    <nav class="tabs" role="tablist" id="tabs"></nav>
+  </header>
+  <main id="main"></main>
+</div>
+
+<div class="bar" id="bar" hidden>
+  <div class="bar-in">
+    <p class="bar-msg" id="barMsg"></p>
+    <button class="undo" id="discard" type="button">Discard</button>
+    <button class="btn btn-gold" id="publish" type="button">Publish</button>
+  </div>
+</div>
+
+<script>
+const OWNER='Dablackhindu',REPO='klassy-bullz',DATA='data/site.json';
+const BRANCH=new URLSearchParams(location.search).get('branch')||'main'; // ?branch= for testing only
+const API=`https://api.github.com/repos/${OWNER}/${REPO}`;
+const RAW=`https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/`;
+
+const CHIP_PRESETS={
+  puppies:['Breed-panel DNA clear','Vet-checked','Microchipped','1st vaccination','2nd vaccination','Flea & worm treated','KC registered','Insured 4 weeks'],
+  studs:['Breed-panel clear','Fertility tested','Proven','KC registered','Open nostrils','Fluffy carrier','Chocolate carrier']
+};
+const TABS=[['puppies','Puppies'],['litter','Litter'],['studs','Studs'],['clinic','Clinic'],['sold','Families'],['settings','Details']];
+
+// ---------- storage (never trusted to exist) ----------
+const store={get(k){try{return localStorage.getItem(k)}catch{return null}},set(k,v){try{localStorage.setItem(k,v)}catch{}},del(k){try{localStorage.removeItem(k)}catch{}}};
+
+let token=store.get('kb_token');
+let data=null,orig='',origPaths=new Set(),headSha=null,dataSha=null;
+const pending={}; // new photo path -> data URL, uploaded on publish
+let tab=store.get('kb_tab')||'puppies',editing=null;
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clone=o=>JSON.parse(JSON.stringify(o));
+const slug=s=>(s||'dog').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'dog';
+const uid=()=>Math.random().toString(36).slice(2,8);
+const imgSrc=p=>pending[p]||RAW+p;
+
+function toast(msg,kind='',ms=3500){
+  document.querySelector('.toast')?.remove();
+  const t=document.createElement('div');t.className='toast '+kind;t.textContent=msg;t.setAttribute('role','status');
+  document.body.appendChild(t);if(ms)setTimeout(()=>t.remove(),ms);return t;
+}
+
+// ---------- GitHub ----------
+async function gh(path,opt={}){
+  const r=await fetch(path.startsWith('http')?path:API+path,{...opt,headers:{
+    Authorization:'Bearer '+token,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28',
+    ...(opt.body?{'Content-Type':'application/json'}:{})}});
+  if(!r.ok){
+    const e=new Error((await r.json().catch(()=>({}))).message||r.statusText);e.status=r.status;throw e;
+  }
+  return r.status===204?null:r.json();
+}
+const b64dec=b=>new TextDecoder().decode(Uint8Array.from(atob(b.replace(/\n/g,'')),c=>c.charCodeAt(0)));
+
+function allPaths(d){
+  const s=new Set();
+  (d.puppies||[]).forEach(p=>(p.photos||[]).forEach(x=>s.add(x)));
+  (d.studs||[]).forEach(p=>(p.photos||[]).forEach(x=>s.add(x)));
+  (d.sold||[]).forEach(p=>p.photo&&s.add(p.photo));
+  return s;
+}
+
+async function load(){
+  $('loading').hidden=false;$('login').hidden=true;$('app').hidden=true;
+  try{
+    const ref=await gh(`/git/ref/heads/${BRANCH}`);
+    headSha=ref.object.sha;
+    const f=await gh(`/contents/${DATA}?ref=${headSha}`);
+    dataSha=f.sha;
+    data=JSON.parse(b64dec(f.content));
+    orig=JSON.stringify(data);origPaths=allPaths(data);
+    $('loading').hidden=true;$('app').hidden=false;
+    draw();
+  }catch(e){
+    $('loading').hidden=true;
+    if(e.status===401||e.status===403||e.status===404){
+      store.del('kb_token');token=null;showLogin();
+      toast(e.status===404?'That key can\'t see the klassy-bullz repo — check "Only select repositories".':'That access key didn\'t work — it may have expired.','err',7000);
+    }else{toast('Couldn\'t load: '+e.message,'err',0);}
+  }
+}
+function showLogin(){$('login').hidden=false;$('app').hidden=true;$('loading').hidden=true;$('bar').hidden=true;$('tok').focus()}
+
+async function publish(){
+  for(const k of ['puppies','studs','clinic','sold']){
+    const bad=(data[k]||[]).findIndex(x=>!x.name?.trim());
+    if(bad>-1){tab=k;editing={k,i:bad};draw();return toast('This one needs a name before you publish.','err')}
+  }
+  const btn=$('publish');btn.disabled=true;btn.textContent='Publishing…';
+  try{
+    // someone (another phone, or me) changed the site since this page loaded?
+    const ref=await gh(`/git/ref/heads/${BRANCH}`);
+    if(ref.object.sha!==headSha){
+      const f=await gh(`/contents/${DATA}?ref=${ref.object.sha}`);
+      if(f.sha!==dataSha)throw new Error('The listings were changed somewhere else since you opened this page. Copy anything important, then reload.');
+      headSha=ref.object.sha;
+    }
+    const base=await gh(`/git/commits/${headSha}`);
+    const now=allPaths(data),tree=[];
+    for(const p of now){
+      if(!pending[p])continue;
+      const blob=await gh('/git/blobs',{method:'POST',body:JSON.stringify({content:pending[p].split(',')[1],encoding:'base64'})});
+      tree.push({path:p,mode:'100644',type:'blob',sha:blob.sha});
+    }
+    for(const p of origPaths)if(!now.has(p)&&p.startsWith('img/'))tree.push({path:p,mode:'100644',type:'blob',sha:null});
+    const json=JSON.stringify(data,null,2)+'\n';
+    tree.push({path:DATA,mode:'100644',type:'blob',content:json});
+    const t=await gh('/git/trees',{method:'POST',body:JSON.stringify({base_tree:base.tree.sha,tree})});
+    const c=await gh('/git/commits',{method:'POST',body:JSON.stringify({message:'Admin: '+summary(),tree:t.sha,parents:[headSha]})});
+    await gh(`/git/refs/heads/${BRANCH}`,{method:'PATCH',body:JSON.stringify({sha:c.sha})});
+    headSha=c.sha;
+    const nf=await gh(`/contents/${DATA}?ref=${c.sha}`);dataSha=nf.sha;
+    orig=JSON.stringify(data);origPaths=now;
+    toast('Published ✓ — live on the site in about a minute.','ok',6000);
+  }catch(e){toast('Publish failed: '+e.message,'err',0)}
+  btn.disabled=false;btn.textContent='Publish';updateBar();
+}
+
+// what changed, in words — used for the bar and the commit message
+function summary(){
+  const o=JSON.parse(orig),out=[];
+  const names=a=>(a||[]).map(x=>x.name);
+  for(const k of ['puppies','studs','clinic','sold']){
+    const a=o[k]||[],b=data[k]||[];
+    const ai=Object.fromEntries(a.map(x=>[x.id||x.name,JSON.stringify(x)]));
+    const bi=Object.fromEntries(b.map(x=>[x.id||x.name,JSON.stringify(x)]));
+    b.forEach(x=>{const id=x.id||x.name;if(!(id in ai))out.push(k==='sold'?x.name+' → Families':'added '+x.name);else if(ai[id]!==bi[id])out.push('edited '+x.name)});
+    a.forEach(x=>{if(!((x.id||x.name) in bi))out.push('removed '+x.name)});
+    if(out.length===0&&JSON.stringify(names(a))!==JSON.stringify(names(b)))out.push('reordered '+k);
+  }
+  if(JSON.stringify(o.litter)!==JSON.stringify(data.litter))out.push('next litter');
+  if(JSON.stringify([o.quote,o.contact,o.chilledFee])!==JSON.stringify([data.quote,data.contact,data.chilledFee]))out.push('details');
+  return out.join(', ')||'update';
+}
+function updateBar(){
+  const dirty=JSON.stringify(data)!==orig;
+  $('bar').hidden=!dirty;
+  if(dirty)$('barMsg').innerHTML='<b>Unpublished:</b> '+esc(summary());
+}
+addEventListener('beforeunload',e=>{if(data&&JSON.stringify(data)!==orig){e.preventDefault();e.returnValue=''}});
+
+// ---------- photos: shrink on the phone before upload ----------
+function shrink(file,max=1600){
+  return new Promise((res,rej)=>{
+    const img=new Image(),u=URL.createObjectURL(file);
+    img.onload=()=>{
+      const k=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight));
+      const c=document.createElement('canvas');c.width=Math.round(img.naturalWidth*k);c.height=Math.round(img.naturalHeight*k);
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(u);
+      res(c.toDataURL('image/jpeg',.82));
+    };
+    img.onerror=()=>{URL.revokeObjectURL(u);rej(new Error('Couldn\'t read that photo ('+file.name+')'))};
+    img.src=u;
+  });
+}
+async function addPhotos(files,name,onEach){
+  for(const f of files){
+    try{
+      const d=await shrink(f);
+      const p=`img/${slug(name)}-${Date.now().toString(36)}${uid().slice(0,3)}.jpg`;
+      pending[p]=d;onEach(p);
+    }catch(e){toast(e.message,'err')}
+  }
+}
+
+// ---------- schemas ----------
+const S={
+  puppies:{one:'puppy',blank:()=>({id:uid(),name:'',colour:'',sex:'Male',dob:'',ready:'Ready now',status:'available',price:0,chips:['Breed-panel DNA clear','Vet-checked','Microchipped','1st vaccination'],photos:[]}),
+    row:p=>[p.photos?.[0],p.name||'Unnamed',`<span class="pill ${p.status}">${p.status}</span>${esc([p.colour,p.sex,p.price?'£'+p.price.toLocaleString('en-GB'):''].filter(Boolean).join(' · '))}`],
+    fields:[['photos','Photos','photos',{hint:'First photo is the cover. Tap ★ to make one the cover.'}],['name','Name','text'],['status','Status','seg',{opts:[['available','Available'],['reserved','Reserved'],['sold','Sold']],hint:'Reserved shows "Deposit taken". Sold hides the puppy from the site.'}],['price','Guide price','money'],['colour','Colour','text',{list:'colours'}],['sex','Sex','seg',{opts:[['Male','Male'],['Female','Female']]}],['dob','Date of birth','date'],['ready','Ready date','text',{hint:'e.g. "Ready now" or "Ready 14 Nov"'}],['chips','Health & extras','chips']]},
+  studs:{one:'stud',blank:()=>({id:uid(),name:'',colour:'',note:'',fee:0,chips:['Breed-panel clear','Fertility tested'],photos:[]}),
+    row:s=>[s.photos?.[0],s.name||'Unnamed',esc([s.colour,s.fee?'£'+s.fee.toLocaleString('en-GB'):''].filter(Boolean).join(' · '))],
+    fields:[['photos','Photos','photos'],['name','Name','text'],['fee','Guide stud fee','money'],['colour','Colour','text',{list:'colours'}],['note','One-liner','text',{hint:'e.g. "Proven — 3 litters on the ground"'}],['chips','Health & traits','chips']]},
+  clinic:{one:'service',blank:()=>({icon:'heart',name:'',desc:'',price:0,unit:'Per dog'}),
+    row:c=>[null,c.name||'Unnamed',esc('£'+c.price+' · '+c.unit)],
+    fields:[['name','Service','text'],['price','Price','money'],['unit','Price note','text',{hint:'e.g. "Per scan" or "Per dog · litters from £12"'}],['desc','Description','textarea'],['icon','Icon','select',{opts:[['scan','Scan'],['chip','Microchip'],['flask','Lab / analysis'],['heart','Heart']]}]]},
+  sold:{one:'family',blank:()=>({id:uid(),name:'',place:'',year:String(new Date().getFullYear()),photo:''}),
+    row:s=>[s.photo,s.name||'Unnamed',esc([s.place,s.year&&s.year+' litter'].filter(Boolean).join(' · '))],
+    fields:[['photo','Photo','photo'],['name','Dog\'s name','text'],['place','Where they live','text'],['year','Litter year','text']]}
+};
+
+// ---------- drawing ----------
+function draw(){
+  $('tabs').innerHTML=TABS.map(([k,l])=>`<button role="tab" aria-selected="${k===tab}" data-tab="${k}">${l}</button>`).join('');
+  const m=$('main');
+  if(editing)m.innerHTML=drawEditor();
+  else if(S[tab])m.innerHTML=drawList(tab);
+  else if(tab==='litter')m.innerHTML=drawLitter();
+  else m.innerHTML=drawSettings();
+  m.insertAdjacentHTML('beforeend','<datalist id="colours">'+['Blue','Blue fawn','Blue & tan','Lilac','Lilac & tan','Lilac fawn','Brindle','Fawn','Cream','Pied','Chocolate','Merle','Isabella'].map(c=>`<option value="${c}">`).join('')+'</datalist>');
+  updateBar();
+}
+const HEAD={puppies:['Puppies','Available and reserved puppies show on the site. Reorder with the arrows.'],studs:['Studs','Your stud dogs and their fees.'],clinic:['Clinic','Services and prices.'],sold:['Families','The "Settled in their homes" gallery.']};
+function drawList(k){
+  const arr=data[k]||(data[k]=[]);
+  return `<h2>${HEAD[k][0]}</h2><p class="sub">${HEAD[k][1]}</p><div class="list">`+arr.map((x,i)=>{
+    const [ph,t,sub]=S[k].row(x);
+    return `<div class="row"><button class="open" data-edit="${i}"><span class="thumb" style="${ph?`background-image:url('${esc(imgSrc(ph))}')`:''}">${ph?'':esc((x.name||'?')[0])}</span><span class="t"><b>${esc(t)}</b><span>${sub}</span></span></button>
+      <span class="move"><button data-mv="${i}" data-d="-1" aria-label="Move ${esc(t)} up" ${i?'':'disabled'}>▲</button><button data-mv="${i}" data-d="1" aria-label="Move ${esc(t)} down" ${i<arr.length-1?'':'disabled'}>▼</button></span></div>`;
+  }).join('')+`</div><button class="add" data-add="${k}">+ Add ${S[k].one}</button>`+(k==='puppies'?'':'');
+}
+function field(obj,[k,label,type,o={}],path){
+  const id='f_'+k,v=obj[k],hint=o.hint?`<p class="hint">${esc(o.hint)}</p>`:'';
+  const at=`id="${id}" data-k="${k}" data-path="${path}"`;
+  switch(type){
+    case 'text':return `<div class="field"><label for="${id}">${label}</label><input type="text" ${at} value="${esc(v)}" ${o.list?`list="${o.list}"`:''} autocomplete="off">${hint}</div>`;
+    case 'textarea':return `<div class="field"><label for="${id}">${label}</label><textarea ${at}>${esc(v)}</textarea>${hint}</div>`;
+    case 'date':return `<div class="field"><label for="${id}">${label}</label><input type="date" ${at} value="${esc(v)}">${hint}</div>`;
+    case 'money':return `<div class="field"><label for="${id}">${label}</label><div class="money"><input type="number" inputmode="numeric" min="0" step="1" ${at} data-num="1" value="${v||''}"></div>${hint}</div>`;
+    case 'select':return `<div class="field"><label for="${id}">${label}</label><select ${at}>${o.opts.map(([a,b])=>`<option value="${a}" ${a===v?'selected':''}>${b}</option>`).join('')}</select>${hint}</div>`;
+    case 'seg':return `<div class="field"><span class="lbl">${label}</span><div class="seg" role="group" aria-label="${label}">${o.opts.map(([a,b])=>`<button type="button" data-seg="${k}" data-v="${a}" data-path="${path}" aria-pressed="${a===v}">${b}</button>`).join('')}</div>${hint}</div>`;
+    case 'chips':{
+      const presets=[...new Set([...(CHIP_PRESETS[tab]||[]),...(v||[])])];
+      return `<div class="field"><span class="lbl">${label}</span><div class="chipset">${presets.map(c=>`<button type="button" data-chip="${esc(c)}" data-path="${path}" aria-pressed="${(v||[]).includes(c)}">${esc(c)}</button>`).join('')}</div>
+        <div class="chip-add"><input type="text" id="chipNew" placeholder="Add your own…" autocomplete="off"><button type="button" class="btn btn-ghost" data-chipadd="${path}">Add</button></div>${hint}</div>`}
+    case 'photos':case 'photo':{
+      const list=type==='photo'?(v?[v]:[]):(v||[]);
+      const can=type==='photos'||!list.length;
+      return `<div class="field"><span class="lbl">${label}</span><div class="photos">${list.map((p,i)=>`<div class="ph ${i===0&&type==='photos'?'cover':''}" style="background-image:url('${esc(imgSrc(p))}')">${i===0&&type==='photos'&&list.length>1?'<span class="badge">Cover</span>':''}
+        <div class="acts">${type==='photos'&&i>0?`<button type="button" data-cover="${i}" aria-label="Make cover">★</button>`:'<span></span>'}<button type="button" data-rmph="${i}" data-k="${k}" aria-label="Remove photo">✕</button></div></div>`).join('')}
+        ${can?`<label class="ph-add"><span>+</span>${list.length?'Add more':'Add photo'}<input type="file" accept="image/*" ${type==='photos'?'multiple':''} data-upload="${k}"></label>`:''}</div>${hint}</div>`}
+  }
+}
+function drawEditor(){
+  const {k,i}=editing,obj=data[k][i],sc=S[k];
+  let extra='';
+  if(k==='puppies'&&obj.status==='sold'&&!(data.sold||[]).some(s=>s.from===obj.id))
+    extra=`<div class="callout"><p><b>${esc(obj.name||'This puppy')}</b> is sold and hidden from the site. Add them to the Families gallery?</p><div class="inline"><input type="text" id="soldPlace" placeholder="Where they live now, e.g. Leeds"><button type="button" class="btn btn-gold" id="toFamily">Add</button></div></div>`;
+  return `<div class="sheet-head"><button class="back" id="back">‹ Done</button><h2>${esc(obj.name||'New '+sc.one)}</h2></div>${extra}`+
+    sc.fields.map(f=>field(obj,f,`${k}.${i}`)).join('')+
+    `<button class="danger" id="del">Delete ${esc(obj.name||'this '+sc.one)}</button>`;
+}
+function drawLitter(){
+  const L=data.litter||(data.litter={show:false,title:'',body:''});
+  return `<h2>Next litter</h2><p class="sub">The banner under the puppies.</p>
+  <label class="check"><input type="checkbox" id="litShow" ${L.show?'checked':''}> Show the banner on the site</label><div style="height:14px"></div>`+
+  field(L,['title','Headline','text',{hint:'e.g. "Spring 2027 — due March"'}],'litter')+
+  field(L,['body','Details','textarea',{hint:'Wrap words in **double stars** to make them bold.'}],'litter');
+}
+function drawSettings(){
+  data.contact??={};data.quote??={};
+  return `<h2>Details</h2><p class="sub">Contact details, the testimonial, and fixed fees.</p>`+
+  field(data.contact,['email','Email','text'],'contact')+
+  field(data.contact,['phone','Phone / WhatsApp','text'],'contact')+
+  field(data.contact,['instagram','Instagram','text'],'contact')+
+  field(data,['chilledFee','Chilled semen courier (on top of stud fee)','money'],'')+
+  field(data.quote,['text','Testimonial','textarea',{hint:'Leave empty to hide it.'}],'quote')+
+  field(data.quote,['by','Testimonial from','text',{hint:'e.g. "Peaches\' family, Leeds"'}],'quote')+
+  `<button class="signout" id="signout">Sign out of this device</button>`;
+}
+
+// ---------- editing ----------
+function target(path){if(!path)return data;const [k,i]=path.split('.');return i===undefined?data[k]:data[k][+i]}
+function setTab(k){tab=k;editing=null;store.set('kb_tab',k);draw();scrollTo(0,0)}
+function refreshRowSummary(){updateBar();const h=document.querySelector('.sheet-head h2');if(h&&editing){const o=data[editing.k][editing.i];h.textContent=o.name||'New '+S[editing.k].one}}
+
+document.addEventListener('input',e=>{
+  const el=e.target;if(!el.dataset.k||el.type==='file')return;
+  const o=target(el.dataset.path);if(!o)return;
+  o[el.dataset.k]=el.dataset.num?Math.max(0,Math.round(+el.value||0)):el.value;
+  refreshRowSummary();
+});
+document.addEventListener('change',async e=>{
+  const el=e.target;
+  if(el.id==='litShow'){data.litter.show=el.checked;updateBar();return}
+  if(el.dataset.upload){
+    const k=el.dataset.upload,o=data[editing.k][editing.i],files=[...el.files];
+    if(!files.length)return;
+    const t=toast(`Preparing ${files.length} photo${files.length>1?'s':''}…`,'',0);
+    await addPhotos(files,o.name,p=>{if(k==='photo')o.photo=p;else (o.photos||(o.photos=[])).push(p)});
+    t.remove();draw();
+  }
+});
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  const d=b.dataset;
+  if(d.tab)return setTab(d.tab);
+  if(d.edit!==undefined){editing={k:tab,i:+d.edit};draw();scrollTo(0,0);return}
+  if(d.add){const arr=data[d.add]||(data[d.add]=[]);arr.push(S[d.add].blank());editing={k:d.add,i:arr.length-1};draw();scrollTo(0,0);$('f_name')?.focus();return}
+  if(d.mv!==undefined){const arr=data[tab],i=+d.mv,j=i+ +d.d;[arr[i],arr[j]]=[arr[j],arr[i]];draw();return}
+  if(d.seg){target(d.path)[d.seg]=d.v;draw();return}
+  if(d.chip){const o=target(d.path),c=d.chip;o.chips=o.chips||[];o.chips=o.chips.includes(c)?o.chips.filter(x=>x!==c):[...o.chips,c];b.setAttribute('aria-pressed',o.chips.includes(c));updateBar();return}
+  if(d.chipadd){const v=$('chipNew').value.trim();if(!v)return;const o=target(d.chipadd);o.chips=[...new Set([...(o.chips||[]),v])];draw();return}
+  if(d.cover!==undefined){const o=data[editing.k][editing.i],i=+d.cover;o.photos.unshift(...o.photos.splice(i,1));draw();return}
+  if(d.rmph!==undefined){const o=data[editing.k][editing.i];if(d.k==='photo')o.photo='';else o.photos.splice(+d.rmph,1);draw();return}
+  if(b.id==='back'){
+    const o=data[editing.k][editing.i];
+    if(!o.name?.trim()){toast('Give it a name first — or delete it.','err');$('f_name')?.focus();return}
+    editing=null;draw();return}
+  if(b.id==='del'){
+    if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Tap again to delete';setTimeout(()=>{if(b.isConnected){b.dataset.confirm='';b.textContent='Delete'}},3000);return}
+    data[editing.k].splice(editing.i,1);editing=null;draw();return}
+  if(b.id==='toFamily'){
+    const o=data.puppies[editing.i],place=$('soldPlace').value.trim();
+    if(!place){toast('Where do they live now?','err');$('soldPlace').focus();return}
+    (data.sold||(data.sold=[])).unshift({id:uid(),from:o.id,name:o.name,place,year:(o.dob||'').slice(0,4)||String(new Date().getFullYear()),photo:o.photos?.[0]||''});
+    toast(`${o.name} added to Families ✓`,'ok');draw();return}
+  if(b.id==='publish')return publish();
+  if(b.id==='discard'){
+    if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Sure?';setTimeout(()=>{b.dataset.confirm='';b.textContent='Discard'},3000);return}
+    b.dataset.confirm='';b.textContent='Discard';
+    data=JSON.parse(orig);editing=null;for(const p in pending)delete pending[p];draw();return}
+  if(b.id==='signout'){store.del('kb_token');token=null;showLogin();return}
+});
+$('loginForm').addEventListener('submit',e=>{e.preventDefault();token=$('tok').value.trim();store.set('kb_token',token);load()});
+
+if(BRANCH!=='main')toast('Test mode: editing branch '+BRANCH,'',0);
+token?load():showLogin();
+</script>
+</body>
+</html>

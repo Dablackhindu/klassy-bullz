@@ -316,6 +316,33 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;
 .foot-brand{font-family:var(--serif);font-weight:700;font-size:17px}
 .foot-fine{font-size:12.5px;color:var(--muted);max-width:520px;line-height:1.7}
 
+/* ---------- real photos (from the admin) ---------- */
+[hidden]{display:none!important}
+.imgframe img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.imgframe.has-photo::after{display:none}
+.imgframe.has-photo{cursor:zoom-in}
+.photo-count{
+  position:absolute;right:14px;bottom:14px;z-index:2;
+  font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--bone);
+  background:rgba(14,12,9,.75);border:1px solid var(--hairline);border-radius:999px;padding:5px 11px;
+}
+.card.empty{border-style:dashed;border-color:var(--gold-line);background:var(--coal-glass)}
+.card.empty .card-body{justify-content:center;align-items:flex-start;min-height:220px}
+.card.empty p{color:var(--muted);font-size:14.5px}
+
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:100;background:rgba(8,7,5,.94);display:grid;place-items:center;padding:24px}
+.lb img{max-width:min(1100px,100%);max-height:calc(100svh - 120px);border-radius:14px;object-fit:contain}
+.lb-cap{position:absolute;left:0;right:0;bottom:22px;text-align:center;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.lb button{
+  position:absolute;background:rgba(23,19,16,.8);border:1px solid var(--gold-line);color:var(--bone);
+  width:48px;height:48px;border-radius:50%;font-size:22px;cursor:pointer;display:grid;place-items:center;
+}
+.lb button:hover,.lb button:focus-visible{color:var(--gold)}
+.lb .lb-x{top:18px;right:18px}
+.lb .lb-prev{left:18px;top:50%;transform:translateY(-50%)}
+.lb .lb-next{right:18px;top:50%;transform:translateY(-50%)}
+
 /* ---------- reveal ---------- */
 .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
 .reveal.in{opacity:1;transform:none}
@@ -400,89 +427,19 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;
       <p>Every puppy leaves us vet-checked, microchipped, first-vaccinated, flea &amp; worm treated, and with a puppy pack, feeding plan and lifetime breeder support.</p>
       <p class="price-note">Guide pricing shown — confirmed pricing published with each litter.</p>
     </div>
-    <div class="cards">
-      <article class="card reveal">
-        <div class="imgframe" role="img" aria-label="Photo slot for Reggie, blue fawn male puppy">
-          <span class="status avail">Available</span>
-          <div class="imgframe-inner">
-            <svg class="pawline" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 13.5c2.6 0 5 2 5 4.3 0 1.5-1.2 2.7-2.7 2.7-.9 0-1.6-.4-2.3-.4s-1.4.4-2.3.4c-1.5 0-2.7-1.2-2.7-2.7 0-2.3 2.4-4.3 5-4.3z"/><circle cx="7" cy="9.5" r="1.8"/><circle cx="17" cy="9.5" r="1.8"/><circle cx="10" cy="6" r="1.8"/><circle cx="14" cy="6" r="1.8"/></svg>
-            <span class="tag">Photo — Reggie</span>
-          </div>
-        </div>
-        <div class="card-body">
-          <h3>Reggie</h3>
-          <p class="card-meta">Blue fawn · Male · Born 14 June 2026 · Ready now</p>
-          <div class="chips">
-            <span class="chip">Breed-panel DNA clear</span>
-            <span class="chip">Vet-checked</span>
-            <span class="chip">Microchipped</span>
-            <span class="chip">1st vaccination</span>
-          </div>
-          <div class="card-foot">
-            <p class="price">£2,500<small>Guide price</small></p>
-            <a class="link-arrow" href="#contact">Enquire</a>
-          </div>
-        </div>
-      </article>
-      <article class="card reveal">
-        <div class="imgframe" role="img" aria-label="Photo slot for Delilah, lilac and tan female puppy">
-          <span class="status avail">Available</span>
-          <div class="imgframe-inner">
-            <svg class="pawline" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 13.5c2.6 0 5 2 5 4.3 0 1.5-1.2 2.7-2.7 2.7-.9 0-1.6-.4-2.3-.4s-1.4.4-2.3.4c-1.5 0-2.7-1.2-2.7-2.7 0-2.3 2.4-4.3 5-4.3z"/><circle cx="7" cy="9.5" r="1.8"/><circle cx="17" cy="9.5" r="1.8"/><circle cx="10" cy="6" r="1.8"/><circle cx="14" cy="6" r="1.8"/></svg>
-            <span class="tag">Photo — Delilah</span>
-          </div>
-        </div>
-        <div class="card-body">
-          <h3>Delilah</h3>
-          <p class="card-meta">Lilac &amp; tan · Female · Born 14 June 2026 · Ready now</p>
-          <div class="chips">
-            <span class="chip">Breed-panel DNA clear</span>
-            <span class="chip">Vet-checked</span>
-            <span class="chip">Microchipped</span>
-            <span class="chip">1st vaccination</span>
-          </div>
-          <div class="card-foot">
-            <p class="price">£3,000<small>Guide price</small></p>
-            <a class="link-arrow" href="#contact">Enquire</a>
-          </div>
-        </div>
-      </article>
-      <article class="card reveal">
-        <div class="imgframe" role="img" aria-label="Photo slot for Winston, brindle male puppy">
-          <span class="status reserved">Reserved</span>
-          <div class="imgframe-inner">
-            <svg class="pawline" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 13.5c2.6 0 5 2 5 4.3 0 1.5-1.2 2.7-2.7 2.7-.9 0-1.6-.4-2.3-.4s-1.4.4-2.3.4c-1.5 0-2.7-1.2-2.7-2.7 0-2.3 2.4-4.3 5-4.3z"/><circle cx="7" cy="9.5" r="1.8"/><circle cx="17" cy="9.5" r="1.8"/><circle cx="10" cy="6" r="1.8"/><circle cx="14" cy="6" r="1.8"/></svg>
-            <span class="tag">Photo — Winston</span>
-          </div>
-        </div>
-        <div class="card-body">
-          <h3>Winston</h3>
-          <p class="card-meta">Brindle · Male · Born 14 June 2026 · Deposit taken</p>
-          <div class="chips">
-            <span class="chip">Breed-panel DNA clear</span>
-            <span class="chip">Vet-checked</span>
-            <span class="chip">Microchipped</span>
-            <span class="chip">1st vaccination</span>
-          </div>
-          <div class="card-foot">
-            <p class="price">£2,800<small>Guide price</small></p>
-            <a class="link-arrow" href="#contact">Waitlist</a>
-          </div>
-        </div>
-      </article>
-    </div>
+    <div class="cards" id="puppyCards"></div>
   </div>
 </section>
 
 <section class="block" id="litters" style="padding-top:0">
   <div class="wrap">
-    <div class="litter reveal">
+    <div class="litter reveal" id="litterBox" hidden>
       <div>
         <p class="eyebrow">Next litter</p>
-        <h3>Autumn 2026 — due September</h3>
-        <p>Our lilac &amp; tan girl and a proven, breed-panel-clear sire. Puppies home from <b>mid-November</b>. The waitlist is free to join and runs first-come, first-choice; a <b>£500 deposit</b> reserves your pick once the litter arrives.</p>
+        <h3></h3>
+        <p></p>
       </div>
-      <a class="btn btn-gold" href="#contact">Join the waitlist</a>
+      <a class="btn btn-gold" href="#contact" data-interest="The upcoming litter waitlist">Join the waitlist</a>
     </div>
   </div>
 </section>
@@ -495,51 +452,8 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;
       <p>Natural mating here at our home, or a chilled collection shipped overnight to your vet. Every stud carries a clear full breed DNA panel and a current fertility report.</p>
       <p class="price-note">Guide fees shown — confirmed fees on enquiry.</p>
     </div>
-    <div class="stud-grid">
-      <article class="stud reveal">
-        <div class="imgframe" role="img" aria-label="Photo slot for Kaiser, lilac and tan stud">
-          <div class="imgframe-inner">
-            <svg class="pawline" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 13.5c2.6 0 5 2 5 4.3 0 1.5-1.2 2.7-2.7 2.7-.9 0-1.6-.4-2.3-.4s-1.4.4-2.3.4c-1.5 0-2.7-1.2-2.7-2.7 0-2.3 2.4-4.3 5-4.3z"/><circle cx="7" cy="9.5" r="1.8"/><circle cx="17" cy="9.5" r="1.8"/><circle cx="10" cy="6" r="1.8"/><circle cx="14" cy="6" r="1.8"/></svg>
-            <span class="tag">Photo — Kaiser</span>
-          </div>
-        </div>
-        <div class="stud-body">
-          <h3>Kaiser</h3>
-          <p class="card-meta">Lilac &amp; tan · Proven — 3 litters on the ground</p>
-          <div class="chips">
-            <span class="chip">Breed-panel clear</span>
-            <span class="chip">Fertility tested</span>
-            <span class="chip">Compact &amp; open-nostrilled</span>
-          </div>
-          <div class="card-foot">
-            <p class="price">£700<small>Guide stud fee</small></p>
-            <a class="link-arrow" href="#contact">Book</a>
-          </div>
-        </div>
-      </article>
-      <article class="stud reveal">
-        <div class="imgframe" role="img" aria-label="Photo slot for Bruno, blue fawn stud">
-          <div class="imgframe-inner">
-            <svg class="pawline" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 13.5c2.6 0 5 2 5 4.3 0 1.5-1.2 2.7-2.7 2.7-.9 0-1.6-.4-2.3-.4s-1.4.4-2.3.4c-1.5 0-2.7-1.2-2.7-2.7 0-2.3 2.4-4.3 5-4.3z"/><circle cx="7" cy="9.5" r="1.8"/><circle cx="17" cy="9.5" r="1.8"/><circle cx="10" cy="6" r="1.8"/><circle cx="14" cy="6" r="1.8"/></svg>
-            <span class="tag">Photo — Bruno</span>
-          </div>
-        </div>
-        <div class="stud-body">
-          <h3>Bruno</h3>
-          <p class="card-meta">Blue fawn · First season — semen analysed &amp; excellent</p>
-          <div class="chips">
-            <span class="chip">Breed-panel clear</span>
-            <span class="chip">Fertility tested</span>
-            <span class="chip">Fluffy carrier</span>
-          </div>
-          <div class="card-foot">
-            <p class="price">£500<small>Guide stud fee</small></p>
-            <a class="link-arrow" href="#contact">Book</a>
-          </div>
-        </div>
-      </article>
-    </div>
-    <p class="semen-note reveal"><b>Chilled semen, UK-wide.</b> Collection, evaluation and next-day courier to your vet from <b>£150</b> on top of the stud fee — distance is no barrier to the right pairing.</p>
+    <div class="stud-grid" id="studGrid"></div>
+    <p class="semen-note reveal"><b>Chilled semen, UK-wide.</b> Collection, evaluation and next-day courier to your vet from <b id="chilledFee">£150</b> on top of the stud fee — distance is no barrier to the right pairing.</p>
   </div>
 </section>
 
@@ -551,26 +465,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;
       <p>Practical fertility services for breeders — carried out by trained, experienced hands, with honest advice thrown in for free.</p>
       <p class="price-note">Guide pricing — confirmed price list to follow.</p>
     </div>
-    <div class="clinic-grid">
-      <article class="svc reveal">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18M8 12a4 4 0 0 1 8 0"/></svg>
-        <h3>Pregnancy scanning</h3>
-        <p>Ultrasound confirmation from day 28, with an estimated count and a printed scan photo to keep. Calm handling, no rushing.</p>
-        <p class="price">£40<small>Per scan</small></p>
-      </article>
-      <article class="svc reveal">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="8" width="16" height="10" rx="2"/><path d="M8 8V6a4 4 0 0 1 8 0v2M12 12v2"/></svg>
-        <h3>Microchipping</h3>
-        <p>Fitted by a trained, registered implanter and logged to a UK-compliant database before you leave. Litter rates for three or more.</p>
-        <p class="price">£15<small>Per dog · litters from £12</small></p>
-      </article>
-      <article class="svc reveal">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12M9 3v6l-5 9a2.4 2.4 0 0 0 2.1 3.5h11.8A2.4 2.4 0 0 0 20 18l-5-9V3"/></svg>
-        <h3>Semen analysis</h3>
-        <p>Motility, concentration and morphology assessed on site with a written report — know exactly where your stud stands before a booking.</p>
-        <p class="price">£50<small>Per analysis</small></p>
-      </article>
-    </div>
+    <div class="clinic-grid" id="clinicGrid"></div>
     <p class="clinic-fineprint reveal">Our clinic covers non-clinical services only. Anything that needs a vet — bloods, progesterone testing, artificial insemination or diagnostics — we'll point you to trusted local practices we work alongside.</p>
   </div>
 </section>
@@ -582,35 +477,10 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;
       <h2>Settled in their homes</h2>
       <p>Klassy Bullz puppies, grown up and thriving. We stay in touch with every family — lifetime support isn't a slogan.</p>
     </div>
-    <div class="sold-grid">
-      <figure class="reveal">
-        <div class="imgframe" role="img" aria-label="Photo slot for Blue, living in Manchester">
-          <div class="imgframe-inner"><span class="tag">Photo — Blue</span></div>
-        </div>
-        <figcaption><b>Blue</b>Manchester · 2025 litter</figcaption>
-      </figure>
-      <figure class="reveal">
-        <div class="imgframe" role="img" aria-label="Photo slot for Peaches, living in Leeds">
-          <div class="imgframe-inner"><span class="tag">Photo — Peaches</span></div>
-        </div>
-        <figcaption><b>Peaches</b>Leeds · 2025 litter</figcaption>
-      </figure>
-      <figure class="reveal">
-        <div class="imgframe" role="img" aria-label="Photo slot for Hugo, living in Birmingham">
-          <div class="imgframe-inner"><span class="tag">Photo — Hugo</span></div>
-        </div>
-        <figcaption><b>Hugo</b>Birmingham · 2024 litter</figcaption>
-      </figure>
-      <figure class="reveal">
-        <div class="imgframe" role="img" aria-label="Photo slot for Nala, living in London">
-          <div class="imgframe-inner"><span class="tag">Photo — Nala</span></div>
-        </div>
-        <figcaption><b>Nala</b>London · 2024 litter</figcaption>
-      </figure>
-    </div>
-    <div class="quote reveal">
-      <blockquote>From the first video call to the day we collected her, everything was open — we met mum, saw the DNA results, and got answers at midnight when she wouldn't settle. You can tell these dogs are family first.</blockquote>
-      <cite>Peaches' family, Leeds</cite>
+    <div class="sold-grid" id="soldGrid"></div>
+    <div class="quote reveal" id="quoteBox" hidden>
+      <blockquote></blockquote>
+      <cite></cite>
     </div>
   </div>
 </section>
@@ -648,11 +518,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;
         <p class="eyebrow">Enquire</p>
         <h3>Tell us what you're looking for</h3>
         <p>Puppy enquiries, stud bookings, clinic appointments or just Frenchie questions — we answer everything personally, usually the same day.</p>
-        <div class="contact-lines">
-          <p><span>Email</span>hello@klassybullz.co.uk</p>
-          <p><span>Phone / WhatsApp</span>07&hairsp;··· ··· ···</p>
-          <p><span>Instagram</span>@klassybullz</p>
-        </div>
+        <div class="contact-lines" id="contactLines"></div>
       </div>
       <form class="reveal" onsubmit="event.preventDefault()">
         <div class="form-row">
@@ -705,9 +571,131 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;
 const nav=document.getElementById('nav');
 addEventListener('scroll',()=>nav.classList.toggle('solid',scrollY>40),{passive:true});
 
-// scroll reveals
+// scroll reveals (re-run after listings render)
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
-document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+const observeReveals=()=>document.querySelectorAll('.reveal:not(.in)').forEach(el=>io.observe(el));
+observeReveals();
+
+// ---- listings: everything Kay edits in admin.html lives in data/site.json ----
+(()=>{
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const md=s=>esc(s).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>'); // **bold** only
+const gbp=n=>'£'+Number(n||0).toLocaleString('en-GB');
+const date=d=>{const t=new Date(d+'T12:00');return isNaN(t)?'':'Born '+t.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})};
+const PAW='<svg class="pawline" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 13.5c2.6 0 5 2 5 4.3 0 1.5-1.2 2.7-2.7 2.7-.9 0-1.6-.4-2.3-.4s-1.4.4-2.3.4c-1.5 0-2.7-1.2-2.7-2.7 0-2.3 2.4-4.3 5-4.3z"/><circle cx="7" cy="9.5" r="1.8"/><circle cx="17" cy="9.5" r="1.8"/><circle cx="10" cy="6" r="1.8"/><circle cx="14" cy="6" r="1.8"/></svg>';
+const ICON={
+  scan:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18M8 12a4 4 0 0 1 8 0"/></svg>',
+  chip:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="8" width="16" height="10" rx="2"/><path d="M8 8V6a4 4 0 0 1 8 0v2M12 12v2"/></svg>',
+  flask:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12M9 3v6l-5 9a2.4 2.4 0 0 0 2.1 3.5h11.8A2.4 2.4 0 0 0 20 18l-5-9V3"/></svg>',
+  heart:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.6-9.2-9A5.2 5.2 0 0 1 12 7a5.2 5.2 0 0 1 9.2 5c-2.2 4.4-9.2 9-9.2 9z"/></svg>'
+};
+const galleries=[];
+const frame=(photos,label,extra='',tagOnly=false)=>{
+  photos=(photos||[]).filter(Boolean);
+  if(!photos.length)return `<div class="imgframe" role="img" aria-label="Photo coming soon: ${esc(label)}">${extra}<div class="imgframe-inner">${tagOnly?'':PAW}<span class="tag">Photo — ${esc(label.split(',')[0])}</span></div></div>`;
+  const g=galleries.push({photos,label})-1;
+  return `<div class="imgframe has-photo" data-g="${g}" tabindex="0" role="button" aria-label="View photos of ${esc(label)}">${extra}<img src="${esc(photos[0])}" alt="${esc(label)}" loading="lazy">${photos.length>1?`<span class="photo-count">1 / ${photos.length}</span>`:''}</div>`;
+};
+const chips=c=>(c||[]).length?`<div class="chips">${c.map(x=>`<span class="chip">${esc(x)}</span>`).join('')}</div>`:'';
+
+function render(d){
+  const pups=(d.puppies||[]).filter(p=>p.status!=='sold');
+  $('puppyCards').innerHTML=pups.length?pups.map(p=>{
+    const reserved=p.status==='reserved';
+    const meta=[p.colour,p.sex,date(p.dob),reserved?'Deposit taken':p.ready].filter(Boolean).map(esc).join(' · ');
+    const label=`${p.name}, ${(p.colour||'').toLowerCase()} ${(p.sex||'').toLowerCase()} puppy`;
+    return `<article class="card reveal">
+      ${frame(p.photos,label,`<span class="status ${reserved?'reserved':'avail'}">${reserved?'Reserved':'Available'}</span>`)}
+      <div class="card-body">
+        <h3>${esc(p.name)}</h3>
+        <p class="card-meta">${meta}</p>
+        ${chips(p.chips)}
+        <div class="card-foot">
+          <p class="price">${p.price?gbp(p.price):'POA'}<small>Guide price</small></p>
+          <a class="link-arrow" href="#contact" data-interest="${reserved?'The upcoming litter waitlist':'An available puppy'}" data-about="${esc(p.name)}">${reserved?'Waitlist':'Enquire'}</a>
+        </div>
+      </div>
+    </article>`}).join(''):`<article class="card empty reveal"><div class="card-body">
+      <h3>All our puppies are home</h3>
+      <p>Every puppy from our last litter has found their family. Join the free waitlist to hear first when the next litter arrives.</p>
+      <a class="link-arrow" href="#contact" data-interest="The upcoming litter waitlist">Join the waitlist</a>
+    </div></article>`;
+
+  const L=d.litter||{},lb=$('litterBox');
+  lb.hidden=!L.show;
+  lb.querySelector('h3').textContent=L.title||'';
+  lb.querySelector('p:not(.eyebrow)').innerHTML=md(L.body);
+
+  $('studGrid').innerHTML=(d.studs||[]).map(s=>`<article class="stud reveal">
+      ${frame(s.photos,`${s.name}, ${(s.colour||'').toLowerCase()} stud`)}
+      <div class="stud-body">
+        <h3>${esc(s.name)}</h3>
+        <p class="card-meta">${[s.colour,s.note].filter(Boolean).map(esc).join(' · ')}</p>
+        ${chips(s.chips)}
+        <div class="card-foot">
+          <p class="price">${s.fee?gbp(s.fee):'POA'}<small>Guide stud fee</small></p>
+          <a class="link-arrow" href="#contact" data-interest="Stud services" data-about="${esc(s.name)}">Book</a>
+        </div>
+      </div>
+    </article>`).join('');
+  $('chilledFee').textContent=gbp(d.chilledFee);
+
+  $('clinicGrid').innerHTML=(d.clinic||[]).map(c=>`<article class="svc reveal">
+      ${ICON[c.icon]||ICON.heart}
+      <h3>${esc(c.name)}</h3>
+      <p>${esc(c.desc)}</p>
+      <p class="price">${gbp(c.price)}<small>${esc(c.unit)}</small></p>
+    </article>`).join('');
+
+  $('soldGrid').innerHTML=(d.sold||[]).map(s=>`<figure class="reveal">
+      ${frame(s.photo?[s.photo]:[],`${s.name}, living in ${s.place}`,'',true)}
+      <figcaption><b>${esc(s.name)}</b>${[s.place,s.year&&s.year+' litter'].filter(Boolean).map(esc).join(' · ')}</figcaption>
+    </figure>`).join('');
+  $('sold').hidden=!(d.sold||[]).length;
+
+  const q=d.quote||{},qb=$('quoteBox');
+  qb.hidden=!q.text;
+  qb.querySelector('blockquote').textContent=q.text||'';
+  qb.querySelector('cite').textContent=q.by||'';
+
+  const c=d.contact||{};
+  $('contactLines').innerHTML=[['Email',c.email],['Phone / WhatsApp',c.phone],['Instagram',c.instagram]]
+    .filter(x=>x[1]).map(([k,v])=>`<p><span>${k}</span>${esc(v)}</p>`).join('');
+
+  observeReveals();
+}
+
+// enquiry links pre-fill the form with what they were looking at
+document.addEventListener('click',e=>{
+  const a=e.target.closest('[data-interest]');if(!a)return;
+  const sel=$('f-interest');[...sel.options].forEach(o=>{if(o.text===a.dataset.interest)sel.value=o.value});
+  if(a.dataset.about&&!$('f-msg').value)$('f-msg').value=`Hi — I'd love to know more about ${a.dataset.about}.`;
+});
+
+// lightbox
+let lbEl=null;
+function openLb(g,i=0){
+  const G=galleries[g];if(!G)return;
+  lbEl?.remove();
+  lbEl=document.createElement('div');lbEl.className='lb';lbEl.setAttribute('role','dialog');lbEl.setAttribute('aria-modal','true');lbEl.setAttribute('aria-label',G.label);
+  const multi=G.photos.length>1;
+  lbEl.innerHTML=`<img alt=""><p class="lb-cap"></p><button class="lb-x" aria-label="Close">×</button>${multi?'<button class="lb-prev" aria-label="Previous photo">‹</button><button class="lb-next" aria-label="Next photo">›</button>':''}`;
+  const show=k=>{i=(k+G.photos.length)%G.photos.length;lbEl.querySelector('img').src=G.photos[i];lbEl.querySelector('img').alt=G.label;lbEl.querySelector('.lb-cap').textContent=G.label.split(',')[0]+(multi?` · ${i+1} / ${G.photos.length}`:'')};
+  const close=()=>{lbEl.remove();lbEl=null;removeEventListener('keydown',key)};
+  const key=e=>{if(e.key==='Escape')close();if(e.key==='ArrowRight')show(i+1);if(e.key==='ArrowLeft')show(i-1)};
+  lbEl.addEventListener('click',e=>{if(e.target===lbEl||e.target.classList.contains('lb-x'))close();if(e.target.classList.contains('lb-next'))show(i+1);if(e.target.classList.contains('lb-prev'))show(i-1)});
+  addEventListener('keydown',key);
+  document.body.appendChild(lbEl);show(i);lbEl.querySelector('.lb-x').focus();
+}
+document.addEventListener('click',e=>{const f=e.target.closest('.imgframe.has-photo');if(f)openLb(+f.dataset.g)});
+document.addEventListener('keydown',e=>{const f=e.target.closest?.('.imgframe.has-photo');if(f&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openLb(+f.dataset.g)}});
+
+// inlined data (Artifact preview) wins; otherwise fetch fresh, bypassing caches so admin edits show up
+if(window.KB_DATA)render(window.KB_DATA);
+else fetch('data/site.json?v='+Date.now(),{cache:'no-store'}).then(r=>r.json()).then(render)
+  .catch(err=>{console.error('site.json failed',err);$('puppyCards').innerHTML='<p class="card-meta">Listings are loading slowly — please refresh, or get in touch below.</p>'});
+})();
 
 // crest video: reveal plays once, then hands off to the pinned-frame loop
 (()=>{
