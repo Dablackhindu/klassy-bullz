@@ -2,18 +2,20 @@
   "puppies": [
     {
       "id": "reggie",
-      "name": "Reggie",
-      "colour": "Blue fawn",
-      "sex": "Male",
-      "dob": "2026-06-14",
-      "ready": "Ready now",
+      "name": "Lolly",
+      "colour": "Blue ",
+      "sex": "Female",
+      "dob": "2026-08-18",
+      "ready": "Ready 13 Oct",
       "status": "available",
       "price": 2500,
       "chips": [
         "Breed-panel DNA clear",
         "Vet-checked",
         "Microchipped",
-        "1st vaccination"
+        "1st vaccination",
+        "Flea & worm treated",
+        "KC registered"
       ],
       "photos": []
     },
