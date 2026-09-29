@@ -9,7 +9,12 @@
       "ready": "Ready now",
       "status": "available",
       "price": 2500,
-      "chips": ["Breed-panel DNA clear", "Vet-checked", "Microchipped", "1st vaccination"],
+      "chips": [
+        "Breed-panel DNA clear",
+        "Vet-checked",
+        "Microchipped",
+        "1st vaccination"
+      ],
       "photos": []
     },
     {
@@ -21,7 +26,12 @@
       "ready": "Ready now",
       "status": "available",
       "price": 3000,
-      "chips": ["Breed-panel DNA clear", "Vet-checked", "Microchipped", "1st vaccination"],
+      "chips": [
+        "Breed-panel DNA clear",
+        "Vet-checked",
+        "Microchipped",
+        "1st vaccination"
+      ],
       "photos": []
     },
     {
@@ -33,14 +43,19 @@
       "ready": "Ready now",
       "status": "reserved",
       "price": 2800,
-      "chips": ["Breed-panel DNA clear", "Vet-checked", "Microchipped", "1st vaccination"],
+      "chips": [
+        "Breed-panel DNA clear",
+        "Vet-checked",
+        "Microchipped",
+        "1st vaccination"
+      ],
       "photos": []
     }
   ],
   "litter": {
     "show": true,
     "title": "Autumn 2026 — due September",
-    "body": "Our lilac & tan girl and a proven, breed-panel-clear sire. Puppies home from **mid-November**. The waitlist is free to join and runs first-come, first-choice; a **£500 deposit** reserves your pick once the litter arrives."
+    "body": "Our lilac & tan girl and a proven, breed-panel-clear sire. Puppies home from **mid-October**. The waitlist is free to join and runs first-come, first-choice; a **£500 deposit** reserves your pick once the litter arrives."
   },
   "studs": [
     {
@@ -49,7 +64,11 @@
       "colour": "Lilac & tan",
       "note": "Proven — 3 litters on the ground",
       "fee": 700,
-      "chips": ["Breed-panel clear", "Fertility tested", "Compact & open-nostrilled"],
+      "chips": [
+        "Breed-panel clear",
+        "Fertility tested",
+        "Compact & open-nostrilled"
+      ],
       "photos": []
     },
     {
@@ -58,7 +77,11 @@
       "colour": "Blue fawn",
       "note": "First season — semen analysed & excellent",
       "fee": 500,
-      "chips": ["Breed-panel clear", "Fertility tested", "Fluffy carrier"],
+      "chips": [
+        "Breed-panel clear",
+        "Fertility tested",
+        "Fluffy carrier"
+      ],
       "photos": []
     }
   ],
@@ -87,10 +110,34 @@
     }
   ],
   "sold": [
-    { "id": "blue", "name": "Blue", "place": "Manchester", "year": "2025", "photo": "" },
-    { "id": "peaches", "name": "Peaches", "place": "Leeds", "year": "2025", "photo": "" },
-    { "id": "hugo", "name": "Hugo", "place": "Birmingham", "year": "2024", "photo": "" },
-    { "id": "nala", "name": "Nala", "place": "London", "year": "2024", "photo": "" }
+    {
+      "id": "blue",
+      "name": "Blue",
+      "place": "Manchester",
+      "year": "2025",
+      "photo": ""
+    },
+    {
+      "id": "peaches",
+      "name": "Peaches",
+      "place": "Leeds",
+      "year": "2025",
+      "photo": ""
+    },
+    {
+      "id": "hugo",
+      "name": "Hugo",
+      "place": "Birmingham",
+      "year": "2024",
+      "photo": ""
+    },
+    {
+      "id": "nala",
+      "name": "Nala",
+      "place": "London",
+      "year": "2024",
+      "photo": ""
+    }
   ],
   "quote": {
     "text": "From the first video call to the day we collected her, everything was open — we met mum, saw the DNA results, and got answers at midnight when she wouldn't settle. You can tell these dogs are family first.",
