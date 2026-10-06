@@ -40,18 +40,20 @@
     },
     {
       "id": "winston",
-      "name": "Winston",
-      "colour": "Brindle",
-      "sex": "Male",
-      "dob": "2026-06-14",
-      "ready": "Ready now",
-      "status": "reserved",
-      "price": 2800,
+      "name": "Skittlez ",
+      "colour": "Merle",
+      "sex": "Female",
+      "dob": "2026-08-18",
+      "ready": "Ready 13 Oct",
+      "status": "available",
+      "price": 2500,
       "chips": [
         "Breed-panel DNA clear",
         "Vet-checked",
         "Microchipped",
-        "1st vaccination"
+        "1st vaccination",
+        "KC registered",
+        "Flea & worm treated"
       ],
       "photos": []
     }
