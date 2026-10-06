@@ -21,18 +21,20 @@
     },
     {
       "id": "delilah",
-      "name": "Delilah",
-      "colour": "Lilac & tan",
+      "name": "Jelly Bean",
+      "colour": "Newshade Isabella",
       "sex": "Female",
-      "dob": "2026-06-14",
-      "ready": "Ready now",
-      "status": "available",
+      "dob": "2026-08-18",
+      "ready": "Ready 13 Oct",
+      "status": "reserved",
       "price": 3000,
       "chips": [
         "Breed-panel DNA clear",
         "Vet-checked",
         "Microchipped",
-        "1st vaccination"
+        "1st vaccination",
+        "KC registered",
+        "Flea & worm treated"
       ],
       "photos": []
     },
