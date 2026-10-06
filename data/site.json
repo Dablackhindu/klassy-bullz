@@ -56,6 +56,25 @@
         "Flea & worm treated"
       ],
       "photos": []
+    },
+    {
+      "id": "mfbzl9",
+      "name": "Luv Hearts",
+      "colour": "Merle",
+      "sex": "Female",
+      "dob": "2026-08-18",
+      "ready": "Ready 13 Oct",
+      "status": "available",
+      "price": 2500,
+      "chips": [
+        "Breed-panel DNA clear",
+        "Vet-checked",
+        "Microchipped",
+        "1st vaccination",
+        "Flea & worm treated",
+        "KC registered"
+      ],
+      "photos": []
     }
   ],
   "litter": {
