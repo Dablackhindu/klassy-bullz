@@ -145,11 +145,21 @@ img{max-width:100%;display:block}
 .scroll-hint::after{content:"";width:1px;height:46px;background:linear-gradient(180deg,var(--gold),transparent);animation:drip 2.2s ease-in-out infinite}
 @keyframes drip{0%{transform:scaleY(.2);transform-origin:top}55%{transform:scaleY(1);transform-origin:top}100%{transform:scaleY(1);opacity:0}}
 @media (max-width:900px){
-  .hero{padding-top:96px;align-items:flex-start}
-  .hero{align-items:flex-end}
-  .hero-inner{grid-template-columns:1fr;gap:34px}
-  .hero-crest{right:auto;left:50%;top:32%;height:min(100vw,60svh);transform:translate(-50%,-50%)}
+  /* phones/tablets: crest gets its own band under the nav, the text block starts below it, everything centred */
+  .hero{padding-top:calc(84px + min(84vw,42svh));padding-bottom:56px;align-items:flex-start;text-align:center}
+  .hero-inner{grid-template-columns:minmax(0,1fr);gap:34px}
+  .hero-crest{right:auto;left:50%;top:calc(76px + min(84vw,42svh)/2);height:min(84vw,42svh);transform:translate(-50%,-50%)}
+  .hero .eyebrow{justify-content:center;font-size:11px;letter-spacing:.16em}
+  .hero .eyebrow::before{display:none}
+  .hero .mission,.hero p.lede{margin-left:auto;margin-right:auto}
+  .hero-ctas{justify-content:center}
+  .hero{overflow-x:clip}
   .hero-bg::after{background:linear-gradient(180deg,rgba(14,12,9,.15) 0%,rgba(14,12,9,.35) 40%,rgba(14,12,9,.92) 72%)}
+}
+@media (max-width:420px){
+  .hero .eyebrow{font-size:10px;letter-spacing:.1em}
+  .brand-name{font-size:15px;white-space:nowrap}
+  .nav-cta{padding:9px 16px}
 }
 @media (max-width:640px){.scroll-hint{display:none}}
 
@@ -1009,16 +1019,19 @@ function bake(){
   const m=document.createElement('canvas').getContext('2d');
   m.font=FONT.replace('{s}',100);try{m.letterSpacing='4px'}catch(e){}
   const wid=Math.max(...LINES.map(l=>m.measureText(l).width));
-  const fs=Math.min(col*.98/wid*100,86),pad=Math.round(fs*.42),lh=fs*1.08;
+  const fs=Math.min(col*.98/wid*100,86),pad=Math.min(Math.round(fs*.42),26),lh=fs*1.08;
   const cssW=Math.round(col+pad*2),cssH=Math.round(lh*2+pad*2-fs*.08);
-  Object.assign(cv.style,{width:cssW+'px',height:cssH+'px',margin:`${-pad}px 0 ${-pad}px ${-pad}px`});
+  // phones centre the lettering under the crest; desktop keeps it flush with the column's left edge
+  const centred=matchMedia('(max-width:900px)').matches;
+  Object.assign(cv.style,{width:cssW+'px',minWidth:cssW+'px',height:cssH+'px',margin:`${-pad}px ${-pad}px ${-pad}px ${-pad}px`});
   const k=Math.min(Math.max(2,(devicePixelRatio||1)*1.5),3);
   W=cv.width=Math.round(cssW*k);H=cv.height=Math.round(cssH*k);
   const F=fs*k,P=pad*k,L=lh*k,y0=P+F*.5;
   const paint=(cx,q)=>{
-    cx.font=FONT.replace('{s}',F*q);cx.textAlign='left';cx.textBaseline='middle';cx.fillStyle='#fff';
+    cx.font=FONT.replace('{s}',F*q);cx.textAlign=centred?'center':'left';cx.textBaseline='middle';cx.fillStyle='#fff';
     try{cx.letterSpacing=(F*.04*q)+'px'}catch(e){}
-    LINES.forEach((l,i)=>cx.fillText(l,P*q,(y0+i*L)*q));
+    // letter-spacing adds a trailing gap after the last glyph, so nudge centred lines right by half of it
+    LINES.forEach((l,i)=>cx.fillText(l,(centred?W/2+F*.02:P)*q,(y0+i*L)*q));
   };
   const mc=document.createElement('canvas');mc.width=W;mc.height=H;const c=mc.getContext('2d');paint(c,1);
   const d=c.getImageData(0,0,W,H).data,n=W*H,a=new Float32Array(n);
