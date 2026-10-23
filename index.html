@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex"><!-- remove when real dogs/prices go live on the real domain -->
 <title>Klassy Bullz Kennels</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700;900&family=Figtree:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Fraunces:wght@400;600;700;900&family=Figtree:wght@400;500;600;700&display=swap">
 <style>
 :root{
   --ink:#0E0C09;
@@ -59,7 +59,7 @@ img{max-width:100%;display:block}
   font-family:var(--serif);font-weight:900;font-size:15px;color:var(--gold);letter-spacing:.02em;
 }
 .brand-name{font-family:var(--serif);font-weight:700;font-size:17px;letter-spacing:.01em}
-.nav-links{display:flex;align-items:center;gap:26px;list-style:none}
+.nav-links{display:flex;align-items:center;gap:26px;list-style:none;margin:0 30px 0 auto}
 .nav-links a{
   text-decoration:none;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
   color:var(--bone);opacity:.75;transition:opacity .2s,color .2s;
@@ -81,7 +81,7 @@ img{max-width:100%;display:block}
 }
 .hero-inner{
   max-width:var(--max);margin:0 auto;width:100%;
-  display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;
+  display:grid;grid-template-columns:minmax(0,min(500px,calc(50% - 32px)));gap:56px;align-items:center;
 }
 .eyebrow{
   font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);
@@ -90,9 +90,13 @@ img{max-width:100%;display:block}
 .eyebrow::before{content:"";width:34px;height:1px;background:var(--gold-line)}
 .hero h1{
   font-family:var(--serif);font-weight:900;letter-spacing:-.015em;line-height:.95;
-  font-size:clamp(46px,6.6vw,96px);text-wrap:balance;
+  font-size:clamp(46px,5.6vw,80px);text-wrap:balance;
 }
-.hero h1 .thin{display:block;font-weight:400;font-size:clamp(14px,1.4vw,19px);letter-spacing:.42em;text-transform:uppercase;color:var(--muted);margin-top:14px;line-height:1.4}
+.hero h1#heroH1{font-family:'Cinzel',Georgia,serif;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#2FC283;line-height:1.08;font-size:clamp(34px,4.4vw,64px)}
+#heroJade{display:none}
+#heroH1.jade-on #heroJade{display:block;max-width:none}
+#heroH1.jade-on .h1-text{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.hero .mission{max-width:560px;margin-top:20px;font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(19px,1.9vw,26px);line-height:1.3;color:var(--gold)}
 .hero p.lede{max-width:520px;margin-top:22px;font-size:clamp(16px,1.5vw,19px);color:var(--bone);opacity:.85}
 .hero-ctas{display:flex;flex-wrap:wrap;gap:14px;margin-top:30px}
 .btn{
@@ -104,20 +108,35 @@ img{max-width:100%;display:block}
 .btn-ghost{border:1px solid var(--gold-line);color:var(--bone)}
 .btn-ghost:hover,.btn-ghost:focus-visible{background:var(--gold-soft);transform:translateY(-2px)}
 
-/* the crest plaque */
-.crest{
-  position:relative;aspect-ratio:1;width:100%;max-width:520px;justify-self:end;
-  border-radius:26px;overflow:hidden;
-  border:1px solid var(--gold-line);
-  box-shadow:0 30px 90px rgba(0,0,0,.55),0 0 90px rgba(217,164,65,.10);
-  background:var(--coal);
+/* the dragon crest fills the first screen, then fades on scroll to reveal the bloodline */
+.hero-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:var(--ink);will-change:opacity}
+/* crest sits in the right half, its edge aligned to the content column; the H1 keeps the left half */
+.hero-crest{
+  position:absolute;top:50%;right:max(28px,calc((100vw - var(--max))/2));
+  /* never wider than the right half of the content column, so it can't slide under the H1 on big screens */
+  height:min(82svh,calc(min(100vw - 56px,var(--max))/2 - 32px));aspect-ratio:1;transform:translateY(-50%);
+  -webkit-mask-image:radial-gradient(closest-side,#000 72%,transparent 100%);mask-image:radial-gradient(closest-side,#000 72%,transparent 100%);
 }
-.crest img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.crest-vignette{
-  position:absolute;inset:0;z-index:3;pointer-events:none;
-  background:radial-gradient(125% 125% at 50% 45%,transparent 58%,rgba(14,12,9,.5) 100%);
-  box-shadow:inset 0 0 0 1px rgba(239,231,218,.04);
+.hero-crest img{display:block;width:100%;height:100%}
+/* the dragon's eyes: slow green pulse with a clean anamorphic flare */
+.eye{
+  position:absolute;width:7%;aspect-ratio:1;transform:translate(-50%,-50%);mix-blend-mode:screen;mix-blend-mode:plus-lighter;
+  animation:eyeglow 4.8s ease-in-out infinite;
 }
+.eye.l{left:46.8%;top:28.9%}
+.eye.r{left:53.1%;top:28.9%}
+.eye::before{
+  content:"";position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle,rgba(235,255,240,1) 0,rgba(140,255,180,.95) 10%,rgba(60,225,125,.6) 24%,rgba(40,200,100,.22) 46%,rgba(40,200,100,0) 70%);
+}
+.eye::after{
+  content:"";position:absolute;left:50%;top:50%;width:420%;height:5%;transform:translate(-50%,-50%);border-radius:50%;
+  background:linear-gradient(90deg,rgba(95,214,140,0),rgba(140,255,185,.5) 36%,rgba(240,255,244,1) 50%,rgba(140,255,185,.5) 64%,rgba(95,214,140,0));
+  box-shadow:0 0 6px rgba(120,255,170,.6);
+}
+@keyframes eyeglow{0%,100%{opacity:.3;transform:translate(-50%,-50%) scale(.82)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}}
+@media (prefers-reduced-motion:reduce){.eye{animation:none;opacity:.8}}
+.hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(14,12,9,.7) 0%,rgba(14,12,9,.3) 40%,rgba(14,12,9,0) 55%)}
 .scroll-hint{
   position:absolute;right:34px;bottom:34px;
   font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);
@@ -127,8 +146,10 @@ img{max-width:100%;display:block}
 @keyframes drip{0%{transform:scaleY(.2);transform-origin:top}55%{transform:scaleY(1);transform-origin:top}100%{transform:scaleY(1);opacity:0}}
 @media (max-width:900px){
   .hero{padding-top:96px;align-items:flex-start}
+  .hero{align-items:flex-end}
   .hero-inner{grid-template-columns:1fr;gap:34px}
-  .crest{order:-1;justify-self:center;max-width:min(72vw,380px)}
+  .hero-crest{right:auto;left:50%;top:32%;height:min(100vw,60svh);transform:translate(-50%,-50%)}
+  .hero-bg::after{background:linear-gradient(180deg,rgba(14,12,9,.15) 0%,rgba(14,12,9,.35) 40%,rgba(14,12,9,.92) 72%)}
 }
 @media (max-width:640px){.scroll-hint{display:none}}
 
@@ -248,6 +269,7 @@ section.tinted{background:var(--coal-glass);border-top:1px solid var(--hairline)
 .svc h3{font-family:var(--serif);font-weight:700;font-size:21px}
 .svc p{font-size:14.5px;color:var(--muted);flex:1}
 .svc .price{font-size:24px}
+.svc .price.soon{font-size:18px;font-style:italic;font-weight:400}
 .clinic-fineprint{margin-top:26px;font-size:13px;color:var(--muted);max-width:640px}
 
 /* ---------- sold gallery ---------- */
@@ -350,6 +372,9 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;
 <body>
 
 <canvas id="bloodline" aria-hidden="true"></canvas>
+<div class="hero-bg" id="heroBg" aria-hidden="true">
+  <div class="hero-crest"><img src="img/kb-crest.jpg" alt="" width="1080" height="1080" fetchpriority="high"><span class="eye l"></span><span class="eye r"></span></div>
+</div>
 
 <div class="page">
 
@@ -372,18 +397,13 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;
   <div class="hero-inner">
     <div class="hero-text">
       <p class="eyebrow">Home-raised French Bulldogs · United Kingdom</p>
-      <h1>Klassy Bullz
-        <span class="thin">Kennels · The bloodline matters</span>
-      </h1>
+      <h1 id="heroH1"><span class="h1-text">Klassy Bullz Kennels</span><canvas id="heroJade" aria-hidden="true"></canvas></h1>
+      <p class="mission">Fed like family, raised like family, matched to yours.</p>
       <p class="lede">A small home kennel breeding French Bulldogs for health first — DNA-tested parents, puppies raised in our living room, and every buyer meets mum.</p>
       <div class="hero-ctas">
         <a class="btn btn-gold" href="#puppies">See available puppies</a>
         <a class="btn btn-ghost" href="#clinic">Stud &amp; clinic services</a>
       </div>
-    </div>
-    <div class="crest" role="img" aria-label="Klassy Bullz Kennels gold crest emblem">
-      <img src="img/kb-crest.jpg" alt="" width="1080" height="1080" fetchpriority="high">
-      <div class="crest-vignette"></div>
     </div>
   </div>
   <p class="scroll-hint" aria-hidden="true">Scroll</p>
@@ -454,7 +474,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;
       <p class="eyebrow">Klassy Bullz Fertility Clinic</p>
       <h2>Breeding support, done properly</h2>
       <p>Practical fertility services for breeders — carried out by trained, experienced hands, with honest advice thrown in for free.</p>
-      <p class="price-note">Guide pricing — confirmed price list to follow.</p>
+      <p class="price-note">The clinic opens in early 2027 — enquire now to be first on the list.</p>
     </div>
     <div class="clinic-grid" id="clinicGrid"></div>
     <p class="clinic-fineprint reveal">Our clinic covers non-clinical services only. Anything that needs a vet — bloods, progesterone testing, artificial insemination or diagnostics — we'll point you to trusted local practices we work alongside.</p>
@@ -636,7 +656,7 @@ function render(d){
       ${ICON[c.icon]||ICON.heart}
       <h3>${esc(c.name)}</h3>
       <p>${esc(c.desc)}</p>
-      <p class="price">${gbp(c.price)}<small>${esc(c.unit)}</small></p>
+      <p class="price soon">Coming early 2027</p>
     </article>`).join('');
 
   $('soldGrid').innerHTML=(d.sold||[]).map(s=>`<figure class="reveal">
@@ -694,7 +714,7 @@ else fetch('data/site.json?v='+Date.now(),{cache:'no-store'}).then(r=>r.json()).
 const cv=document.getElementById('bloodline'),ctx=cv.getContext('2d');
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const P=0.35; // parallax factor: world scrolls at 35% of page speed
-let W,H,docH,worldH,nodes=[],links=[],dust=[],t0=null;
+let W,H,docH,worldH,nodes=[],links=[],dust=[],sparks=[],nextSpark=0,t0=null;
 
 let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return(seed-1)/2147483646};
 
@@ -795,21 +815,26 @@ function frame(now){
     ctx.beginPath();ctx.arc(n.x,sy,r,0,7);ctx.fill();
   });
 
-  // a spark of light travelling a thread near the current viewport
-  if(!reduced&&T>4){
-    const vis=links.filter(l=>onScreen((l.a.y+l.b.y)/2-off));
-    if(vis.length){
-      const cycle=4.5,p=(T%cycle)/cycle;
-      const l=vis[Math.floor(T/cycle)%vis.length];
+  // the waterfall: sparks of light falling down threads near the viewport — mostly gold, the odd rare green
+  if(!reduced&&T>2.5){
+    if(T>=nextSpark){
+      const vis=links.filter(l=>onScreen((l.a.y+l.b.y)/2-off));
+      if(vis.length)sparks.push({l:vis[Math.floor(Math.random()*vis.length)],t:T,dur:1.6+Math.random()*1.2,green:Math.random()<.12});
+      nextSpark=T+.22+Math.random()*.3;
+    }
+    sparks=sparks.filter(s=>T-s.t<s.dur);
+    sparks.forEach(s=>{
+      const l=s.l,p=(T-s.t)/s.dur;
       const ay=l.a.y-off,by=l.b.y-off,my=(ay+by)/2,u=1-p;
       const x=u*u*u*l.a.x+3*u*u*p*l.a.x+3*u*p*p*l.b.x+p*p*p*l.b.x;
       const y=u*u*u*ay+3*u*u*p*my+3*u*p*p*my+p*p*p*by;
-      const g2=ctx.createRadialGradient(x,y,0,x,y,14);
-      g2.addColorStop(0,'rgba(239,231,218,.8)');
-      g2.addColorStop(.3,'rgba(217,164,65,.35)');
-      g2.addColorStop(1,'rgba(217,164,65,0)');
-      ctx.fillStyle=g2;ctx.beginPath();ctx.arc(x,y,14,0,7);ctx.fill();
-    }
+      const c=s.green?'95,214,140':'217,164,65',R=s.green?18:14;
+      const g2=ctx.createRadialGradient(x,y,0,x,y,R);
+      g2.addColorStop(0,s.green?'rgba(220,255,230,.9)':'rgba(239,231,218,.8)');
+      g2.addColorStop(.3,'rgba('+c+',.45)');
+      g2.addColorStop(1,'rgba('+c+',0)');
+      ctx.fillStyle=g2;ctx.beginPath();ctx.arc(x,y,R,0,7);ctx.fill();
+    });
   }
   if(!reduced)requestAnimationFrame(frame);
 }
@@ -824,6 +849,218 @@ if(reduced){
 let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{build();if(reduced)frame(10000)},150)});
 // page height changes as media loads — keep the world in sync
 setInterval(()=>{const h=document.documentElement.scrollHeight;if(Math.abs(h-docH)>120){build();if(reduced)frame(10000)}},2500);
+})();
+
+// ---- the crest fades out over the first screen of scroll, revealing the bloodline behind ----
+(()=>{
+const bg=document.getElementById('heroBg');
+const fade=()=>{const o=Math.max(0,1-scrollY/(innerHeight*.85));bg.style.opacity=o;bg.style.visibility=o?'visible':'hidden'};
+addEventListener('scroll',fade,{passive:true});addEventListener('resize',fade);fade();
+})();
+
+// ---- the H1: E1 royal jade with an S1 hairline gold stroke, rendered in WebGL; the real text stays in the h1 for SEO + screen readers ----
+(()=>{
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const VS='attribute vec2 p;varying vec2 uv;void main(){uv=p*.5+.5;gl_Position=vec4(p,0.,1.);}';
+const FS=`precision highp float;
+varying vec2 uv;uniform sampler2D tex;uniform vec2 res;uniform float t,bevel,sh,royal,lift,hue,emis,halo,smode,sLo,sHi,sAA,grade,sOff;uniform vec3 vcol;
+// cinematic grade: filmic tone curve, cool shadows / warm highlights, a touch less saturation
+vec3 cine(vec3 x){
+  // tone-map luminance only, so the jade keeps its green hue instead of drifting teal
+  float l0=max(dot(x,vec3(.2126,.7152,.0722)),1e-4),lt=l0*1.15;
+  lt=(lt*(2.51*lt+.03))/(lt*(2.43*lt+.59)+.14);
+  lt=mix(lt,smoothstep(0.,1.,lt),.6);
+  x*=lt/l0;
+  float l=lt;
+  x+=mix(vec3(-.03,.006,.045),vec3(.07,.035,-.035),smoothstep(.15,.75,l));
+  x=mix(vec3(l),x,.9);
+  return clamp(x,0.,1.);
+}
+float h21(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}
+float nz(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+  return mix(mix(h21(i),h21(i+vec2(1,0)),f.x),mix(h21(i+vec2(0,1)),h21(i+vec2(1,1)),f.x),f.y);}
+float fbm(vec2 p){float v=0.,a=.5;mat2 m=mat2(1.6,1.2,-1.2,1.6);for(int i=0;i<5;i++){v+=a*nz(p);p=m*p;a*=.5;}return v;}
+void main(){
+  vec2 px=1./res;vec4 s=texture2D(tex,uv);float m=s.r,h=s.g;
+  float hL=texture2D(tex,uv-vec2(px.x,0.)).g,hR=texture2D(tex,uv+vec2(px.x,0.)).g;
+  float hD=texture2D(tex,uv-vec2(0.,px.y)).g,hU=texture2D(tex,uv+vec2(0.,px.y)).g;
+  vec3 N=normalize(vec3((hL-hR)*bevel,(hD-hU)*bevel,1.));
+  // jade marble: domain-warped noise, swirling with t
+  vec2 p=uv*vec2(res.x/res.y,1.)*2.6;float a=t*.05;
+  vec2 q=vec2(fbm(p+vec2(cos(a),sin(a))*1.5),fbm(p+vec2(5.2,1.3)+vec2(-sin(a),cos(a))*1.5));
+  vec2 r=vec2(fbm(p+3.6*q+vec2(1.7,9.2)+t*.03),fbm(p+3.6*q+vec2(8.3,2.8)-t*.025));
+  float f=fbm(p+3.2*r);
+  // J tiles keep the original palette (royal=0); E tiles use bright imperial jade, shifted by hue (emerald -> imperial yellow-green) and lift
+  vec3 deep=mix(vec3(.015,.15,.095),mix(vec3(.0,.30,.17),vec3(.04,.34,.11),hue)*lift,royal);
+  vec3 mid=mix(vec3(.07,.43,.27),mix(vec3(.02,.66,.40),vec3(.16,.76,.30),hue)*lift,royal);
+  vec3 lite=mix(vec3(.36,.78,.54),mix(vec3(.40,.98,.68),vec3(.66,1.,.52),hue)*lift,royal);
+  vec3 col=mix(deep,mid,smoothstep(.25,.72,f));
+  col=mix(col,lite,smoothstep(.5,1.,length(q)*f*1.25));
+  float vein=pow(1.-abs(sin((p.x+p.y*.35)*2.1+f*10.)),12.);
+  float dark=pow(1.-abs(sin(p.y*2.7+r.x*8.)),22.);
+  col=mix(col,vec3(.82,.96,.87),vein*.5);
+  col=mix(col,deep*.45,dark*mix(.55,.22,royal));
+  // lighting: lit from the top left, jade is brighter where it is thicker
+  vec3 L=normalize(vec3(-.5,.55,.68));float dif=clamp(dot(N,L),0.,1.);
+  float spec=pow(clamp(dot(N,normalize(L+vec3(0.,0.,1.))),0.,1.),70.);
+  vec3 c=col*(.38+.8*dif)*(.75+.45*h)+spec*vec3(.92,1.,.95)*.85;
+  // thin gold rim on the outer bevel
+  // emissive: glowing veins plus a soft inner light in the pale clouds, breathing slowly
+  float breathe=1.+.15*sin(t*.7);
+  vec3 em=(vein*1.1+smoothstep(.55,.95,f)*.35)*emis*breathe*vcol;
+  c+=em*royal;
+  float rim=m*(1.-smoothstep(.47,.54,h));
+  vec3 gold=vec3(.85,.64,.25)*(.5+.9*dif)+spec*.6;
+  c=mix(c,gold,rim*.75);
+  // stroke: a band outside the letters from the dilated mask in A (modes: 1 gold metal, 2 ink gap + gold, 3 ink, 4 glowing jade)
+  float d=s.a,dl=texture2D(tex,uv-vec2(px.x,0.)).a,dr=texture2D(tex,uv+vec2(px.x,0.)).a;
+  float dd=texture2D(tex,uv-vec2(0.,px.y)).a,du=texture2D(tex,uv+vec2(0.,px.y)).a;
+  float band=smode>0.?(1.-m)*smoothstep(sLo,sLo+sAA,d):0.;
+  vec3 SN=normalize(vec3((dl-dr)*24.,(dd-du)*24.,1.));
+  float sdif=clamp(dot(SN,L),0.,1.),sspec=pow(clamp(dot(SN,normalize(L+vec3(0.,0.,1.))),0.,1.),40.);
+  vec3 sgold=vec3(.86,.64,.26)*(.45+.85*sdif)+sspec*vec3(1.,.92,.7)*.9;
+  vec3 ink=vec3(.03,.025,.02);
+  vec3 outerCol=smode>6.5&&smode<7.5?vec3(.94,.9,.82):smode>5.5&&smode<6.5?vec3(.42,1.,.66):sgold;
+  bool twoTone=(smode>1.5&&smode<2.5)||(smode>5.5&&smode<7.5);
+  vec3 sc=smode<1.5?sgold:twoTone?mix(outerCol,ink,smoothstep(sHi,sHi+sAA,d)):(smode>3.5&&smode<4.5)?vec3(.35,1.,.62)*(1.2+.25*sin(t*.7)):ink;
+  // poster layers behind the stroke: a hard offset block shadow (5) or a stepped 3D extrusion (8)
+  vec2 dir=vec2(-sOff*res.y/res.x,sOff);
+  float ex=0.;vec3 exCol=vec3(0.);
+  if(smode>4.5&&smode<5.5){ex=smoothstep(sLo,sLo+sAA,texture2D(tex,uv+dir).a);exCol=vec3(.62,.46,.16);}
+  if(smode>7.5){
+    for(int k=14;k>=1;k--){
+      float fk=float(k)/14.;
+      float cv=smoothstep(sLo,sLo+sAA,texture2D(tex,uv+dir*fk).a);
+      if(cv>.01){ex=max(ex,cv);exCol=mix(vec3(.03,.30,.17),vec3(.005,.07,.04),fk);}
+    }
+  }
+  if(grade>.5){c=cine(c);sc=(smode>3.5&&smode<4.5)?sc:cine(sc);exCol=cine(exCol);}
+  // soft drop shadow down-right, cast by letters + stroke
+  float cover=max(m,band);
+  float shadow=max(texture2D(tex,uv+vec2(-sh*.6,sh)).g,smode>0.?smoothstep(sLo,sLo+sAA,texture2D(tex,uv+vec2(-sh*.6,sh)).a):0.)*.6*(1.-cover)*(1.-min(1.,halo));
+  vec3 glowCol=mix(vec3(.25,1.,.6),vcol,.35);
+  if(smode>3.5&&smode<4.5)glowCol=vec3(.3,1.,.6);
+  float haloAmt=texture2D(tex,uv).b*(halo+((smode>3.5&&smode<4.5)?.45:0.)+grade*.3)*breathe*(1.-cover)*royal;
+  if(grade>.5)glowCol=mix(glowCol,vec3(.75,.85,.45),.35);
+  float exA=ex*(1.-cover);
+  gl_FragColor=vec4(c*m+sc*band+exCol*exA+glowCol*haloAmt*(1.-exA),cover+exA+shadow*(1.-exA));
+}`;
+// exact squared distance to the nearest letter pixel (Felzenszwalb-Huttenlocher), for even-width strokes
+function edt(a,w,h){
+  const INF=1e20,n=Math.max(w,h),f=new Float64Array(n),dd=new Float64Array(n),v=new Int32Array(n),z=new Float64Array(n+1);
+  const g=new Float64Array(w*h);
+  for(let i=0;i<w*h;i++)g[i]=a[i]>.5?0:INF;
+  const pass=(get,set,len)=>{
+    for(let q=0;q<len;q++)f[q]=get(q);
+    let k=0;v[0]=0;z[0]=-INF;z[1]=INF;
+    for(let q=1;q<len;q++){
+      let sv=((f[q]+q*q)-(f[v[k]]+v[k]*v[k]))/(2*q-2*v[k]);
+      while(sv<=z[k]){k--;sv=((f[q]+q*q)-(f[v[k]]+v[k]*v[k]))/(2*q-2*v[k]);}
+      k++;v[k]=q;z[k]=sv;z[k+1]=INF;
+    }
+    k=0;for(let q=0;q<len;q++){while(z[k+1]<q)k++;dd[q]=(q-v[k])*(q-v[k])+f[v[k]];}
+    for(let q=0;q<len;q++)set(q,dd[q]);
+  };
+  for(let x=0;x<w;x++)pass(y=>g[y*w+x],(y,val)=>{g[y*w+x]=val},h);
+  for(let y=0;y<h;y++)pass(x=>g[y*w+x],(x,val)=>{g[y*w+x]=val},w);
+  return g;
+}
+
+function boxBlur(src,w,h,r){
+  const tmp=new Float32Array(w*h),out=new Float32Array(w*h),k=1/(2*r+1);
+  for(let y=0;y<h;y++){let acc=0;const o=y*w;
+    for(let x=-r;x<=r;x++)acc+=src[o+Math.min(w-1,Math.max(0,x))];
+    for(let x=0;x<w;x++){tmp[o+x]=acc*k;acc+=src[o+Math.min(w-1,x+r+1)]-src[o+Math.max(0,x-r)];}}
+  for(let x=0;x<w;x++){let acc=0;
+    for(let y=-r;y<=r;y++)acc+=tmp[Math.min(h-1,Math.max(0,y))*w+x];
+    for(let y=0;y<h;y++){out[y*w+x]=acc*k;acc+=tmp[Math.min(h-1,y+r+1)*w+x]-tmp[Math.max(0,y-r)*w+x];}}
+  return out;
+}
+
+// E1 royal jade, S1 hairline gold stroke: tuned on the font contact sheet
+const E1={lift:1.10,hue:0.10,emis:0.30,halo:0.10,vcol:[0.70,1.00,0.85]},STROKE=0.022;
+const h1=document.getElementById('heroH1'),cv=document.getElementById('heroJade');
+const gl=cv.getContext('webgl',{premultipliedAlpha:true,alpha:true,antialias:false});
+if(!gl)return;
+let pr;
+try{
+  const sh=(type,src)=>{const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);
+    if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(s));return s};
+  pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,VS));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,FS));
+  gl.linkProgram(pr);if(!gl.getProgramParameter(pr,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(pr));
+}catch(e){console.error(e);return}
+gl.useProgram(pr);
+const buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+const loc=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+const U=n=>gl.getUniformLocation(pr,n);
+const tex=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tex);
+[gl.TEXTURE_MIN_FILTER,gl.TEXTURE_MAG_FILTER].forEach(k=>gl.texParameteri(gl.TEXTURE_2D,k,gl.LINEAR));
+[gl.TEXTURE_WRAP_S,gl.TEXTURE_WRAP_T].forEach(k=>gl.texParameteri(gl.TEXTURE_2D,k,gl.CLAMP_TO_EDGE));
+gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,false);
+gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);
+
+const FONT="700 {s}px 'Cinzel'",LINES=['KLASSY BULLZ','KENNELS'];
+let W=0,H=0;
+
+function bake(){
+  // size the lettering to the hero text column; the canvas overhangs by `pad` so the glyphs still line up with the column edge
+  const col=h1.parentElement.clientWidth;if(!col)return;
+  const m=document.createElement('canvas').getContext('2d');
+  m.font=FONT.replace('{s}',100);try{m.letterSpacing='4px'}catch(e){}
+  const wid=Math.max(...LINES.map(l=>m.measureText(l).width));
+  const fs=Math.min(col*.98/wid*100,86),pad=Math.round(fs*.42),lh=fs*1.08;
+  const cssW=Math.round(col+pad*2),cssH=Math.round(lh*2+pad*2-fs*.08);
+  Object.assign(cv.style,{width:cssW+'px',height:cssH+'px',margin:`${-pad}px 0 ${-pad}px ${-pad}px`});
+  const k=Math.min(Math.max(2,(devicePixelRatio||1)*1.5),3);
+  W=cv.width=Math.round(cssW*k);H=cv.height=Math.round(cssH*k);
+  const F=fs*k,P=pad*k,L=lh*k,y0=P+F*.5;
+  const paint=(cx,q)=>{
+    cx.font=FONT.replace('{s}',F*q);cx.textAlign='left';cx.textBaseline='middle';cx.fillStyle='#fff';
+    try{cx.letterSpacing=(F*.04*q)+'px'}catch(e){}
+    LINES.forEach((l,i)=>cx.fillText(l,P*q,(y0+i*L)*q));
+  };
+  const mc=document.createElement('canvas');mc.width=W;mc.height=H;const c=mc.getContext('2d');paint(c,1);
+  const d=c.getImageData(0,0,W,H).data,n=W*H,a=new Float32Array(n);
+  for(let i=0;i<n;i++)a[i]=d[i*4+3]/255;
+  const r=Math.max(2,Math.round(F*.045));
+  let hgt=boxBlur(a,W,H,r);hgt=boxBlur(hgt,W,H,r);
+  const R=Math.max(4,Math.round(F*.12));let wide=boxBlur(a,W,H,R);wide=boxBlur(wide,W,H,R);
+  const img=new Uint8Array(n*4);
+  for(let i=0;i<n;i++){img[i*4]=a[i]*255;img[i*4+1]=Math.min(1,hgt[i])*255;img[i*4+2]=Math.min(1,wide[i]*1.6)*255;}
+  // stroke distance field, built at 2x and averaged down for clean edges
+  const w=Math.max(1.5,STROKE*F),D=Math.ceil(w)+3,W2=W*2,H2=H*2;
+  const m2=document.createElement('canvas');m2.width=W2;m2.height=H2;const c2=m2.getContext('2d');paint(c2,2);
+  const d2=c2.getImageData(0,0,W2,H2).data,a2=new Float32Array(W2*H2);
+  for(let i=0;i<W2*H2;i++)a2[i]=d2[i*4+3]/255;
+  const g=edt(a2,W2,H2),dist2=i=>a2[i]>.5?0:Math.max(0,Math.sqrt(g[i])-.5)/2;
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){
+    const j=(y*2)*W2+x*2,dist=(dist2(j)+dist2(j+1)+dist2(j+W2)+dist2(j+W2+1))/4;
+    img[(y*W+x)*4+3]=Math.max(0,1-dist/D)*255;
+  }
+  gl.viewport(0,0,W,H);gl.bindTexture(gl.TEXTURE_2D,tex);
+  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,W,H,0,gl.RGBA,gl.UNSIGNED_BYTE,img);
+  const u={royal:1,lift:E1.lift,hue:E1.hue,emis:E1.emis,halo:E1.halo,bevel:r*2.2,sh:F*.05/H,smode:1,sLo:1-(w+.6)/D,sHi:0,sAA:1.6/D,grade:0,sOff:0};
+  for(const key in u)gl.uniform1f(U(key),u[key]);
+  gl.uniform3f(U('vcol'),...E1.vcol);gl.uniform2f(U('res'),W,H);
+  h1.classList.add('jade-on');
+}
+const t0=performance.now();
+function draw(now){
+  if(!W)return;
+  gl.uniform1f(U('t'),reduced?14:(now-t0)/1000);
+  gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+}
+let visible=true,raf=0;
+const loop=now=>{draw(now);raf=visible&&!reduced?requestAnimationFrame(loop):0};
+new IntersectionObserver(es=>{visible=es[0].isIntersecting;if(visible&&!raf&&!reduced)raf=requestAnimationFrame(loop)}).observe(cv);
+document.fonts.load(FONT.replace('{s}',40)).then(()=>{
+  bake();draw(performance.now());if(!reduced)raf=requestAnimationFrame(loop);
+  let rt,lastCol=h1.parentElement.clientWidth;
+  addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{
+    const col=h1.parentElement.clientWidth;if(col===lastCol)return;lastCol=col;bake();draw(performance.now())},150)});
+}).catch(()=>{});
+cv.addEventListener('webglcontextlost',e=>{e.preventDefault();h1.classList.remove('jade-on')});
 })();
 </script>
 </body>
