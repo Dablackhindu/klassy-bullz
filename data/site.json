@@ -134,6 +134,13 @@
       "desc": "Motility, concentration and morphology assessed on site with a written report — know exactly where your stud stands before a booking.",
       "price": 50,
       "unit": "Per analysis"
+    },
+    {
+      "icon": "flask",
+      "name": "Cytology ",
+      "desc": "",
+      "price": 40,
+      "unit": "Per dog"
     }
   ],
   "sold": [
