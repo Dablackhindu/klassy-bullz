@@ -29,12 +29,12 @@
       "status": "reserved",
       "price": 3000,
       "chips": [
-        "Breed-panel DNA clear",
         "Vet-checked",
         "Microchipped",
         "1st vaccination",
         "KC registered",
-        "Flea & worm treated"
+        "Flea & worm treated",
+        "2nd vaccination"
       ],
       "photos": []
     },
