@@ -873,19 +873,8 @@ addEventListener('scroll',fade,{passive:true});addEventListener('resize',fade);f
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const VS='attribute vec2 p;varying vec2 uv;void main(){uv=p*.5+.5;gl_Position=vec4(p,0.,1.);}';
 const FS=`precision highp float;
-varying vec2 uv;uniform sampler2D tex;uniform vec2 res;uniform float t,bevel,sh,royal,lift,hue,emis,halo,smode,sLo,sHi,sAA,grade,sOff;uniform vec3 vcol;
-// cinematic grade: filmic tone curve, cool shadows / warm highlights, a touch less saturation
-vec3 cine(vec3 x){
-  // tone-map luminance only, so the jade keeps its green hue instead of drifting teal
-  float l0=max(dot(x,vec3(.2126,.7152,.0722)),1e-4),lt=l0*1.15;
-  lt=(lt*(2.51*lt+.03))/(lt*(2.43*lt+.59)+.14);
-  lt=mix(lt,smoothstep(0.,1.,lt),.6);
-  x*=lt/l0;
-  float l=lt;
-  x+=mix(vec3(-.03,.006,.045),vec3(.07,.035,-.035),smoothstep(.15,.75,l));
-  x=mix(vec3(l),x,.9);
-  return clamp(x,0.,1.);
-}
+varying vec2 uv;uniform sampler2D tex;uniform vec2 res;
+uniform float t,bevel,sh,lift,hue,emis,halo,sLo,sAA,vw,vsat,flow,sheen,spark,spd,breath;uniform vec3 vcol;
 float h21(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}
 float nz(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
   return mix(mix(h21(i),h21(i+vec2(1,0)),f.x),mix(h21(i+vec2(0,1)),h21(i+vec2(1,1)),f.x),f.y);}
@@ -895,65 +884,52 @@ void main(){
   float hL=texture2D(tex,uv-vec2(px.x,0.)).g,hR=texture2D(tex,uv+vec2(px.x,0.)).g;
   float hD=texture2D(tex,uv-vec2(0.,px.y)).g,hU=texture2D(tex,uv+vec2(0.,px.y)).g;
   vec3 N=normalize(vec3((hL-hR)*bevel,(hD-hU)*bevel,1.));
-  // jade marble: domain-warped noise, swirling with t
-  vec2 p=uv*vec2(res.x/res.y,1.)*2.6;float a=t*.05;
+  float tt=t*spd;
+  vec2 p=uv*vec2(res.x/res.y,1.)*2.6;float a=tt*.05;
   vec2 q=vec2(fbm(p+vec2(cos(a),sin(a))*1.5),fbm(p+vec2(5.2,1.3)+vec2(-sin(a),cos(a))*1.5));
-  vec2 r=vec2(fbm(p+3.6*q+vec2(1.7,9.2)+t*.03),fbm(p+3.6*q+vec2(8.3,2.8)-t*.025));
+  vec2 r=vec2(fbm(p+3.6*q+vec2(1.7,9.2)+tt*.03),fbm(p+3.6*q+vec2(8.3,2.8)-tt*.025));
   float f=fbm(p+3.2*r);
-  // J tiles keep the original palette (royal=0); E tiles use bright imperial jade, shifted by hue (emerald -> imperial yellow-green) and lift
-  vec3 deep=mix(vec3(.015,.15,.095),mix(vec3(.0,.30,.17),vec3(.04,.34,.11),hue)*lift,royal);
-  vec3 mid=mix(vec3(.07,.43,.27),mix(vec3(.02,.66,.40),vec3(.16,.76,.30),hue)*lift,royal);
-  vec3 lite=mix(vec3(.36,.78,.54),mix(vec3(.40,.98,.68),vec3(.66,1.,.52),hue)*lift,royal);
+  vec3 deep=mix(vec3(.0,.30,.17),vec3(.04,.34,.11),hue)*lift;
+  vec3 mid=mix(vec3(.02,.66,.40),vec3(.16,.76,.30),hue)*lift;
+  vec3 lite=mix(vec3(.40,.98,.68),vec3(.66,1.,.52),hue)*lift;
   vec3 col=mix(deep,mid,smoothstep(.25,.72,f));
   col=mix(col,lite,smoothstep(.5,1.,length(q)*f*1.25));
-  float vein=pow(1.-abs(sin((p.x+p.y*.35)*2.1+f*10.)),12.);
+  float vein=pow(1.-abs(sin((p.x+p.y*.35)*2.1+f*10.)),vw);
   float dark=pow(1.-abs(sin(p.y*2.7+r.x*8.)),22.);
-  col=mix(col,vec3(.82,.96,.87),vein*.5);
-  col=mix(col,deep*.45,dark*mix(.55,.22,royal));
-  // lighting: lit from the top left, jade is brighter where it is thicker
+  // flow: bright pulses that travel along the vein pattern
+  float fl=mix(1.,.2+2.2*pow(.5+.5*sin(f*16.-t*1.8+p.x*.9),4.),flow);
+  col=mix(col,mix(vec3(.82,.96,.87),vcol,vsat),vein*.5);
+  col=mix(col,deep*.45,dark*.22);
   vec3 L=normalize(vec3(-.5,.55,.68));float dif=clamp(dot(N,L),0.,1.);
   float spec=pow(clamp(dot(N,normalize(L+vec3(0.,0.,1.))),0.,1.),70.);
   vec3 c=col*(.38+.8*dif)*(.75+.45*h)+spec*vec3(.92,1.,.95)*.85;
-  // thin gold rim on the outer bevel
-  // emissive: glowing veins plus a soft inner light in the pale clouds, breathing slowly
-  float breathe=1.+.15*sin(t*.7);
-  vec3 em=(vein*1.1+smoothstep(.55,.95,f)*.35)*emis*breathe*vcol;
-  c+=em*royal;
+  float breathe=1.+breath*sin(t*.7);
+  c+=(vein*1.1*fl+smoothstep(.55,.95,f)*.35)*emis*breathe*vcol;
   float rim=m*(1.-smoothstep(.47,.54,h));
   vec3 gold=vec3(.85,.64,.25)*(.5+.9*dif)+spec*.6;
   c=mix(c,gold,rim*.75);
-  // stroke: a band outside the letters from the dilated mask in A (modes: 1 gold metal, 2 ink gap + gold, 3 ink, 4 glowing jade)
+  // sheen: a soft diagonal band of light crossing the title every 7s
+  float sx=fract(t/7.)*3.2-1.1;
+  float sb=exp(-pow((uv.x*res.x/res.y*.32+uv.y*.35-sx)*15.,2.))*sheen;
+  c+=vec3(1.,.93,.74)*sb*(.3+.7*dif)*.6;
+  // stroke
   float d=s.a,dl=texture2D(tex,uv-vec2(px.x,0.)).a,dr=texture2D(tex,uv+vec2(px.x,0.)).a;
   float dd=texture2D(tex,uv-vec2(0.,px.y)).a,du=texture2D(tex,uv+vec2(0.,px.y)).a;
-  float band=smode>0.?(1.-m)*smoothstep(sLo,sLo+sAA,d):0.;
+  float band=(1.-m)*smoothstep(sLo,sLo+sAA,d);
   vec3 SN=normalize(vec3((dl-dr)*24.,(dd-du)*24.,1.));
   float sdif=clamp(dot(SN,L),0.,1.),sspec=pow(clamp(dot(SN,normalize(L+vec3(0.,0.,1.))),0.,1.),40.);
-  vec3 sgold=vec3(.86,.64,.26)*(.45+.85*sdif)+sspec*vec3(1.,.92,.7)*.9;
-  vec3 ink=vec3(.03,.025,.02);
-  vec3 outerCol=smode>6.5&&smode<7.5?vec3(.94,.9,.82):smode>5.5&&smode<6.5?vec3(.42,1.,.66):sgold;
-  bool twoTone=(smode>1.5&&smode<2.5)||(smode>5.5&&smode<7.5);
-  vec3 sc=smode<1.5?sgold:twoTone?mix(outerCol,ink,smoothstep(sHi,sHi+sAA,d)):(smode>3.5&&smode<4.5)?vec3(.35,1.,.62)*(1.2+.25*sin(t*.7)):ink;
-  // poster layers behind the stroke: a hard offset block shadow (5) or a stepped 3D extrusion (8)
-  vec2 dir=vec2(-sOff*res.y/res.x,sOff);
-  float ex=0.;vec3 exCol=vec3(0.);
-  if(smode>4.5&&smode<5.5){ex=smoothstep(sLo,sLo+sAA,texture2D(tex,uv+dir).a);exCol=vec3(.62,.46,.16);}
-  if(smode>7.5){
-    for(int k=14;k>=1;k--){
-      float fk=float(k)/14.;
-      float cv=smoothstep(sLo,sLo+sAA,texture2D(tex,uv+dir*fk).a);
-      if(cv>.01){ex=max(ex,cv);exCol=mix(vec3(.03,.30,.17),vec3(.005,.07,.04),fk);}
-    }
-  }
-  if(grade>.5){c=cine(c);sc=(smode>3.5&&smode<4.5)?sc:cine(sc);exCol=cine(exCol);}
-  // soft drop shadow down-right, cast by letters + stroke
+  vec3 sc=vec3(.86,.64,.26)*(.45+.85*sdif)+sspec*vec3(1.,.92,.7)*.9+vec3(1.,.9,.6)*sb*1.4;
+  // sparkle: rare four-point glints scattered over the letters
+  vec2 g=uv*vec2(res.x/res.y,1.)*9.;vec2 id=floor(g);float hh=h21(id);
+  vec2 cc=fract(g)-.5-(vec2(h21(id+3.1),h21(id+7.7))-.5)*.5;
+  float tw=pow(max(0.,sin(t*(.45+hh*.7)+hh*60.)),40.);
+  float star=smoothstep(.07,0.,length(cc))+.7*(max(0.,1.-abs(cc.y)*30.)*smoothstep(.42,0.,abs(cc.x))+max(0.,1.-abs(cc.x)*30.)*smoothstep(.42,0.,abs(cc.y)));
+  float spk=star*tw*spark*step(.6,hh)*smoothstep(.35,.7,s.b);
   float cover=max(m,band);
-  float shadow=max(texture2D(tex,uv+vec2(-sh*.6,sh)).g,smode>0.?smoothstep(sLo,sLo+sAA,texture2D(tex,uv+vec2(-sh*.6,sh)).a):0.)*.6*(1.-cover)*(1.-min(1.,halo));
+  float shadow=max(texture2D(tex,uv+vec2(-sh*.6,sh)).g,smoothstep(sLo,sLo+sAA,texture2D(tex,uv+vec2(-sh*.6,sh)).a))*.6*(1.-cover)*(1.-min(1.,halo));
   vec3 glowCol=mix(vec3(.25,1.,.6),vcol,.35);
-  if(smode>3.5&&smode<4.5)glowCol=vec3(.3,1.,.6);
-  float haloAmt=texture2D(tex,uv).b*(halo+((smode>3.5&&smode<4.5)?.45:0.)+grade*.3)*breathe*(1.-cover)*royal;
-  if(grade>.5)glowCol=mix(glowCol,vec3(.75,.85,.45),.35);
-  float exA=ex*(1.-cover);
-  gl_FragColor=vec4(c*m+sc*band+exCol*exA+glowCol*haloAmt*(1.-exA),cover+exA+shadow*(1.-exA));
+  float haloAmt=s.b*halo*breathe*(1.-cover);
+  gl_FragColor=vec4(c*m+sc*band+glowCol*haloAmt+vec3(1.,.97,.86)*spk,min(1.,cover+shadow+spk*.6));
 }`;
 // exact squared distance to the nearest letter pixel (Felzenszwalb-Huttenlocher), for even-width strokes
 function edt(a,w,h){
@@ -987,8 +963,8 @@ function boxBlur(src,w,h,r){
   return out;
 }
 
-// E1 royal jade, S1 hairline gold stroke: tuned on the font contact sheet
-const E1={lift:1.10,hue:0.10,emis:0.30,halo:0.10,vcol:[0.70,1.00,0.85]},STROKE=0.022;
+// V3 "Royal sheen" (title variations round 2): lit mint veins + a gold-white light sweep every 7s, crisp 2.6px gold edge
+const E1={lift:1.10,hue:0.10,emis:0.7,halo:0.16,vcol:[0.45,1.00,0.75],vw:7,vsat:0.6,flow:0,sheen:1,spark:0,spd:1.6,breath:0.2,edge:2.6},STROKE=0.022;
 const h1=document.getElementById('heroH1'),cv=document.getElementById('heroJade');
 const gl=cv.getContext('webgl',{premultipliedAlpha:true,alpha:true,antialias:false});
 if(!gl)return;
@@ -1053,7 +1029,8 @@ function bake(){
   }
   gl.viewport(0,0,W,H);gl.bindTexture(gl.TEXTURE_2D,tex);
   gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,W,H,0,gl.RGBA,gl.UNSIGNED_BYTE,img);
-  const u={royal:1,lift:E1.lift,hue:E1.hue,emis:E1.emis,halo:E1.halo,bevel:r*2.2,sh:F*.05/H,smode:1,sLo:1-(w+2)/D,sHi:0,sAA:4.2/D,grade:0,sOff:0};
+  const u={lift:E1.lift,hue:E1.hue,emis:E1.emis,halo:E1.halo,bevel:r*2.2,sh:F*.05/H,sLo:1-(w+E1.edge/2.1)/D,sAA:E1.edge/D,
+    vw:E1.vw,vsat:E1.vsat,flow:E1.flow,sheen:E1.sheen,spark:E1.spark,spd:E1.spd,breath:E1.breath};
   for(const key in u)gl.uniform1f(U(key),u[key]);
   gl.uniform3f(U('vcol'),...E1.vcol);gl.uniform2f(U('res'),W,H);
   h1.classList.add('jade-on');
