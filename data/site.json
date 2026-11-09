@@ -99,7 +99,7 @@
     {
       "id": "bruno",
       "name": "Marshmerlo ",
-      "colour": "Blue Sable Merle ",
+      "colour": "Blue Sable Merle Intensity Fluffy",
       "note": "Proven — 1 litter on the ground ",
       "fee": 1000,
       "chips": [
@@ -108,7 +108,9 @@
         "KC registered",
         "Chocolate carrier"
       ],
-      "photos": []
+      "photos": [
+        "img/marshmerlo-mw9pymfu697.jpg"
+      ]
     }
   ],
   "chilledFee": 150,
