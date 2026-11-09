@@ -82,14 +82,14 @@
     {
       "id": "kaiser",
       "name": "Cheque Mate ",
-      "colour": "Blue Sable Merle",
+      "colour": "Blue Sable Merle Fluffy",
       "note": "BIG BONED SOLID STRUCTURE ",
       "fee": 750,
       "chips": [
         "Breed-panel clear",
-        "Fertility tested",
         "KC registered",
-        "Chocolate carrier"
+        "Chocolate carrier",
+        "Dna tested"
       ],
       "photos": [
         "img/cheque-mate-mvmfkke2fv5.jpg",
@@ -106,7 +106,8 @@
         "Breed-panel clear",
         "Proven",
         "KC registered",
-        "Chocolate carrier"
+        "Chocolate carrier",
+        "Dna tested"
       ],
       "photos": [
         "img/marshmerlo-mw9pymfu697.jpg"
