@@ -3,7 +3,7 @@
     {
       "id": "reggie",
       "name": "Lolly",
-      "colour": "Merle ",
+      "colour": "Tan / Merle ",
       "sex": "Female",
       "dob": "2026-08-18",
       "ready": "Ready 13 Oct",
@@ -16,7 +16,15 @@
         "Flea & worm treated",
         "KC registered"
       ],
-      "photos": []
+      "photos": [
+        "img/lolly-mwj8h7p9ihg.jpg",
+        "img/lolly-mwj8h7ldspj.jpg",
+        "img/lolly-mwj8h7mr1sp.jpg",
+        "img/lolly-mwj8h7nzivg.jpg",
+        "img/lolly-mwj8h7qpxmj.jpg",
+        "img/lolly-mwj8h7rsn2g.jpg",
+        "img/lolly-mwj8h7tacdc.jpg"
+      ]
     },
     {
       "id": "delilah",
