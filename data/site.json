@@ -29,7 +29,7 @@
     {
       "id": "delilah",
       "name": "Jelly Bean",
-      "colour": "Newshade Isabella",
+      "colour": "Newshade Isabella Tan",
       "sex": "Female",
       "dob": "2026-08-18",
       "ready": "Ready 13 Oct",
@@ -42,7 +42,11 @@
         "KC registered",
         "Flea & worm treated"
       ],
-      "photos": []
+      "photos": [
+        "img/jelly-bean-mwj8ja8n43t.jpg",
+        "img/jelly-bean-mwj8ja9u2u3.jpg",
+        "img/jelly-bean-mwj8jab7n1y.jpg"
+      ]
     },
     {
       "id": "winston",
