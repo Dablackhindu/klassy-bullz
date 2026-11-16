@@ -111,7 +111,7 @@
       "name": "Cheque Mate ",
       "colour": "Blue Sable Merle Fluffy",
       "note": "BIG BONED SOLID STRUCTURE ",
-      "fee": 750,
+      "fee": 1000,
       "chips": [
         "Breed-panel clear",
         "KC registered",
@@ -119,6 +119,8 @@
         "Dna tested"
       ],
       "photos": [
+        "img/cheque-mate-mwj8qb2r9v3.jpg",
+        "img/cheque-mate-mwj8qb3utbk.jpg",
         "img/cheque-mate-mvmfkke2fv5.jpg",
         "img/cheque-mate-mvmfkru0ngj.jpg"
       ]
@@ -137,7 +139,11 @@
         "Dna tested"
       ],
       "photos": [
-        "img/marshmerlo-mw9pymfu697.jpg"
+        "img/marshmerlo-mwj8sv0scxu.jpg",
+        "img/marshmerlo-mwj8sv2dgnv.jpg",
+        "img/marshmerlo-mw9pymfu697.jpg",
+        "img/marshmerlo-mwj8sv3n9ec.jpg",
+        "img/marshmerlo-mwj8sv5a41h.jpg"
       ]
     }
   ],
