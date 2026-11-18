@@ -181,10 +181,10 @@
   "sold": [
     {
       "id": "blue",
-      "name": "Blue",
-      "place": "Manchester",
+      "name": "Velma",
+      "place": "Essex",
       "year": "2025",
-      "photo": ""
+      "photo": "img/velma-mwm2kiybas7.jpg"
     },
     {
       "id": "peaches",
