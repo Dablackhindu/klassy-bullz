@@ -3,7 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex"><!-- remove when real dogs/prices go live on the real domain -->
 <title>Klassy Bullz Kennels</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Fraunces:wght@400;600;700;900&family=Figtree:wght@400;500;600;700&display=swap">
@@ -558,7 +557,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;
         <p>Puppy enquiries, stud bookings, clinic appointments or just Frenchie questions — we answer everything personally, usually the same day.</p>
         <div class="contact-lines" id="contactLines"></div>
       </div>
-      <form class="reveal" onsubmit="event.preventDefault()">
+      <form class="reveal" id="enquiryForm">
         <div class="form-row">
           <div>
             <label for="f-name">Your name</label>
@@ -586,7 +585,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;
           <textarea id="f-msg" name="message" placeholder="Tell us a little about your home and what you're looking for"></textarea>
         </div>
         <button class="btn btn-gold" type="submit" style="border:none;cursor:pointer;align-self:flex-start">Send enquiry</button>
-        <p class="form-note">Prototype form — goes live with the domain. Replies within one working day.</p>
+        <p class="form-note" id="formNote">Opens your email app with your enquiry ready to send. Replies within one working day.</p>
       </form>
     </div>
   </div>
@@ -702,12 +701,28 @@ function render(d){
   qb.querySelector('blockquote').textContent=q.text||'';
   qb.querySelector('cite').textContent=q.by||'';
 
-  const c=d.contact||{};
+  const c=d.contact||{};CONTACT_EMAIL=c.email||'';
   $('contactLines').innerHTML=[['Email',c.email],['Phone / WhatsApp',c.phone],['Instagram',c.instagram]]
     .filter(x=>x[1]).map(([k,v])=>`<p><span>${k}</span>${esc(v)}</p>`).join('');
 
   observeReveals();wireStrips();
 }
+
+// enquiry form: no server, so open the visitor's email app addressed to the contact email (from site.json)
+let CONTACT_EMAIL='';
+$('enquiryForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const v=id=>$(id).value.trim(),to=CONTACT_EMAIL.trim();
+  if(!to){$('formNote').textContent='Please use the email or phone number shown on the left.';return}
+  const subject=`Enquiry: ${v('f-interest')} — ${v('f-name')}`;
+  const body=`Name: ${v('f-name')}
+Contact: ${v('f-contact')}
+Interested in: ${v('f-interest')}
+
+${v('f-msg')}`;
+  location.href=`mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  $('formNote').textContent=`Your email app should open now. If it doesn't, email ${to} directly.`;
+});
 
 // enquiry links pre-fill the form with what they were looking at
 document.addEventListener('click',e=>{
