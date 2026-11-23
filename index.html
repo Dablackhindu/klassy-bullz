@@ -355,10 +355,27 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;
 .card.empty .card-body{justify-content:center;align-items:flex-start;min-height:220px}
 .card.empty p{color:var(--muted);font-size:14.5px}
 
+/* swipe strip on cards (several photos) */
+.strip{position:absolute;inset:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;touch-action:pan-x pan-y}
+.strip::-webkit-scrollbar{display:none}
+.imgframe .strip img{position:relative;inset:auto;flex:0 0 100%;scroll-snap-align:start;scroll-snap-stop:always}
+.fr-prev,.fr-next{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:38px;height:38px;border-radius:50%;
+  background:rgba(14,12,9,.7);border:1px solid var(--gold-line);color:var(--bone);font-size:20px;cursor:pointer;
+  display:grid;place-items:center;opacity:0;transition:opacity .2s;
+}
+.fr-prev{left:10px}.fr-next{right:10px}
+.imgframe.multi:hover .fr-prev,.imgframe.multi:hover .fr-next,.imgframe.multi:focus-within .fr-prev,.imgframe.multi:focus-within .fr-next{opacity:1}
+.fr-prev:hover,.fr-next:hover{color:var(--gold)}
+@media (hover:none){.fr-prev,.fr-next{display:none}} /* phones: swipe instead */
+
 /* lightbox */
-.lb{position:fixed;inset:0;z-index:100;background:rgba(8,7,5,.94);display:grid;place-items:center;padding:24px}
-.lb img{max-width:min(1100px,100%);max-height:calc(100svh - 120px);border-radius:14px;object-fit:contain}
-.lb-cap{position:absolute;left:0;right:0;bottom:22px;text-align:center;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.lb{position:fixed;inset:0;z-index:100;background:rgba(8,7,5,.94)}
+.lb-strip{position:absolute;inset:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior:contain}
+.lb-strip::-webkit-scrollbar{display:none}
+.lb-slide{flex:0 0 100%;display:grid;place-items:center;padding:24px 24px 64px;scroll-snap-align:center;scroll-snap-stop:always}
+.lb img{max-width:min(1100px,100%);max-height:calc(100svh - 120px);border-radius:14px;object-fit:contain;user-select:none}
+.lb-cap{pointer-events:none;position:absolute;left:0;right:0;bottom:22px;text-align:center;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .lb button{
   position:absolute;background:rgba(23,19,16,.8);border:1px solid var(--gold-line);color:var(--bone);
   width:48px;height:48px;border-radius:50%;font-size:22px;cursor:pointer;display:grid;place-items:center;
@@ -616,7 +633,12 @@ const frame=(photos,label,extra='',tagOnly=false)=>{
   photos=(photos||[]).filter(Boolean);
   if(!photos.length)return `<div class="imgframe" role="img" aria-label="Photo coming soon: ${esc(label)}">${extra}<div class="imgframe-inner">${tagOnly?'':PAW}<span class="tag">Photo — ${esc(label.split(',')[0])}</span></div></div>`;
   const g=galleries.push({photos,label})-1;
-  return `<div class="imgframe has-photo" data-g="${g}" tabindex="0" role="button" aria-label="View photos of ${esc(label)}">${extra}<img src="${esc(photos[0])}" alt="${esc(label)}" loading="lazy">${photos.length>1?`<span class="photo-count">1 / ${photos.length}</span>`:''}</div>`;
+  if(photos.length===1)return `<div class="imgframe has-photo" data-g="${g}" tabindex="0" role="button" aria-label="View photos of ${esc(label)}">${extra}<img src="${esc(photos[0])}" alt="${esc(label)}" loading="lazy" decoding="async"></div>`;
+  // several photos: a native swipe strip right on the card (scroll-snap), arrows for mouse users
+  return `<div class="imgframe has-photo multi" data-g="${g}" tabindex="0" role="button" aria-label="View photos of ${esc(label)}">${extra}
+    <div class="strip">${photos.map((p,k)=>`<img ${k?'data-src':'src'}="${esc(p)}" alt="${esc(label)} — photo ${k+1}" ${k?'':'loading="lazy"'} decoding="async" draggable="false">`).join('')}</div>
+    <button class="fr-prev" aria-label="Previous photo" tabindex="-1">‹</button><button class="fr-next" aria-label="Next photo" tabindex="-1">›</button>
+    <span class="photo-count">1 / ${photos.length}</span></div>`;
 };
 const chips=c=>(c||[]).length?`<div class="chips">${c.map(x=>`<span class="chip">${esc(x)}</span>`).join('')}</div>`:'';
 
@@ -684,7 +706,7 @@ function render(d){
   $('contactLines').innerHTML=[['Email',c.email],['Phone / WhatsApp',c.phone],['Instagram',c.instagram]]
     .filter(x=>x[1]).map(([k,v])=>`<p><span>${k}</span>${esc(v)}</p>`).join('');
 
-  observeReveals();
+  observeReveals();wireStrips();
 }
 
 // enquiry links pre-fill the form with what they were looking at
@@ -694,23 +716,48 @@ document.addEventListener('click',e=>{
   if(a.dataset.about&&!$('f-msg').value)$('f-msg').value=`Hi — I'd love to know more about ${a.dataset.about}.`;
 });
 
-// lightbox
+// swipe strips: index of the slide currently in view, scroll to a slide, keep the counter in sync
+const idx=s=>Math.round(s.scrollLeft/(s.clientWidth||1));
+const go=(s,k)=>{const n=s.children.length;s.scrollTo({left:((k+n)%n)*s.clientWidth,behavior:'smooth'})};
+const sync=(s,out)=>{let t;s.addEventListener('scroll',()=>{cancelAnimationFrame(t);t=requestAnimationFrame(()=>out(idx(s)))},{passive:true})};
+// cards: once a card is near the screen, start loading the rest of its photos so swiping is instant
+const lazyIO=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;
+  e.target.querySelectorAll('img[data-src]').forEach(im=>{im.src=im.dataset.src;im.removeAttribute('data-src')});lazyIO.unobserve(e.target)}),{rootMargin:'400px'});
+const wireStrips=()=>document.querySelectorAll('.imgframe.multi:not([data-wired])').forEach(f=>{
+  f.dataset.wired=1;const s=f.querySelector('.strip'),c=f.querySelector('.photo-count'),n=s.children.length;
+  sync(s,k=>c.textContent=`${k+1} / ${n}`);lazyIO.observe(f);
+});
+new MutationObserver(wireStrips).observe(document.body,{childList:true,subtree:true});
+
+// lightbox: every photo sits in one swipeable strip, all loaded up front, so next/prev is instant
 let lbEl=null;
 function openLb(g,i=0){
   const G=galleries[g];if(!G)return;
   lbEl?.remove();
   lbEl=document.createElement('div');lbEl.className='lb';lbEl.setAttribute('role','dialog');lbEl.setAttribute('aria-modal','true');lbEl.setAttribute('aria-label',G.label);
-  const multi=G.photos.length>1;
-  lbEl.innerHTML=`<img alt=""><p class="lb-cap"></p><button class="lb-x" aria-label="Close">×</button>${multi?'<button class="lb-prev" aria-label="Previous photo">‹</button><button class="lb-next" aria-label="Next photo">›</button>':''}`;
-  const show=k=>{i=(k+G.photos.length)%G.photos.length;lbEl.querySelector('img').src=G.photos[i];lbEl.querySelector('img').alt=G.label;lbEl.querySelector('.lb-cap').textContent=G.label.split(',')[0]+(multi?` · ${i+1} / ${G.photos.length}`:'')};
-  const close=()=>{lbEl.remove();lbEl=null;removeEventListener('keydown',key)};
-  const key=e=>{if(e.key==='Escape')close();if(e.key==='ArrowRight')show(i+1);if(e.key==='ArrowLeft')show(i-1)};
-  lbEl.addEventListener('click',e=>{if(e.target===lbEl||e.target.classList.contains('lb-x'))close();if(e.target.classList.contains('lb-next'))show(i+1);if(e.target.classList.contains('lb-prev'))show(i-1)});
-  addEventListener('keydown',key);
-  document.body.appendChild(lbEl);show(i);lbEl.querySelector('.lb-x').focus();
+  const n=G.photos.length,multi=n>1,name=G.label.split(',')[0];
+  lbEl.innerHTML=`<div class="lb-strip">${G.photos.map((p,k)=>`<div class="lb-slide"><img src="${esc(p)}" alt="${esc(G.label)} — photo ${k+1}" decoding="async" draggable="false"></div>`).join('')}</div><p class="lb-cap"></p><button class="lb-x" aria-label="Close">×</button>${multi?'<button class="lb-prev" aria-label="Previous photo">‹</button><button class="lb-next" aria-label="Next photo">›</button>':''}`;
+  const s=lbEl.querySelector('.lb-strip'),cap=lbEl.querySelector('.lb-cap');
+  const label=k=>cap.textContent=name+(multi?` · ${k+1} / ${n}`:'');
+  const close=()=>{lbEl.remove();lbEl=null;removeEventListener('keydown',key);document.documentElement.style.overflow=''};
+  const key=e=>{if(e.key==='Escape')close();if(e.key==='ArrowRight')go(s,idx(s)+1);if(e.key==='ArrowLeft')go(s,idx(s)-1)};
+  lbEl.addEventListener('click',e=>{const c=e.target.classList;
+    if(c.contains('lb-x')||c.contains('lb-slide')||e.target===lbEl)close();
+    if(c.contains('lb-next'))go(s,idx(s)+1);if(c.contains('lb-prev'))go(s,idx(s)-1)});
+  addEventListener('keydown',key);sync(s,label);
+  document.documentElement.style.overflow='hidden';
+  document.body.appendChild(lbEl);s.scrollLeft=i*s.clientWidth;label(i);lbEl.querySelector('.lb-x').focus();
 }
-document.addEventListener('click',e=>{const f=e.target.closest('.imgframe.has-photo');if(f)openLb(+f.dataset.g)});
-document.addEventListener('keydown',e=>{const f=e.target.closest?.('.imgframe.has-photo');if(f&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openLb(+f.dataset.g)}});
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.fr-prev,.fr-next');
+  if(b){const s=b.parentNode.querySelector('.strip');go(s,idx(s)+(b.classList.contains('fr-next')?1:-1));return}
+  const f=e.target.closest('.imgframe.has-photo');if(!f)return;
+  const s=f.querySelector('.strip');openLb(+f.dataset.g,s?idx(s):0);
+});
+document.addEventListener('keydown',e=>{const f=e.target.closest?.('.imgframe.has-photo');if(!f)return;
+  const s=f.querySelector('.strip');
+  if(s&&(e.key==='ArrowRight'||e.key==='ArrowLeft')){e.preventDefault();go(s,idx(s)+(e.key==='ArrowRight'?1:-1))}
+  if(e.key==='Enter'||e.key===' '){e.preventDefault();openLb(+f.dataset.g,s?idx(s):0)}});
 
 // inlined data (Artifact preview) wins; otherwise fetch fresh, bypassing caches so admin edits show up
 if(window.KB_DATA)render(window.KB_DATA);
